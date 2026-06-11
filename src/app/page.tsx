@@ -1,34 +1,25 @@
-// MAIN PAGE
+// MAIN PAGE -> DEEP DIVE
 
-//DEEP DIVE
+// bracket imports are named imports from files with multiple exports
+import { prisma } from "@/lib/prisma"
+import { calculateProgress } from "@/lib/progress";
 
-//STATIC MOCK UI
-// NO DATABASE CONNECTED
-// AI GENERATED
-const goals = [
-  {
-    title: "Launch Memotive MVP",
-    description: "Build the first usable goal and task dashboard.",
-    progress: 40,
-    tasks: [
-      { title: "Create GitHub repo", completed: true },
-      { title: "Set up Prisma", completed: true },
-      { title: "Build dashboard UI", completed: false },
-    ],
-  },
-  {
-    title: "Improve developer workflow",
-    description: "Practice Git, VS Code, and backend basics.",
-    progress: 25,
-    tasks: [
-      { title: "Push first commit", completed: true },
-      { title: "Create database models", completed: false },
-    ],
-  },
-];
+// REMOVED STATIC DATABASE MODULE
 
-//HOME PAGE
-export default function Home() {
+// turned into async function for await promise
+export default async function Home() {
+  // initiate the goals await function 
+  // findMany() retrives multipe records from database table / collection
+  // calling without arguements returns all records for that specific model
+  const goals = await prisma.goal.findMany({
+    include:{
+      tasks: true
+    },
+    orderBy:{
+      createdAt: "desc",
+    }
+  });
+
   return (
     <main className="min-h-screen bg-slate-950 text-white p-8">
       <section className="mx-auto max-w-5xl">
@@ -45,45 +36,62 @@ export default function Home() {
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {goals.map((goal) => (
-            <div
-              key={goal.title}
-              className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg"
-            >
-              <h2 className="text-xl font-semibold">{goal.title}</h2>
-              <p className="mt-2 text-sm text-slate-400">
-                {goal.description}
-              </p>
+          {/* map function to list data 
+          creates new array populated with results of calling 
+          function for every single element of the array*/}
+          {/* DEEP DIVE INTO MAPPING LOGIC */}
+          {goals.map((goal) => {
+            const progress = calculateProgress(goal.tasks);
+            
+            return (
+              <div
+                key={goal.id}
+                className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg"
+              >
+                <h2 className="text-xl font-semibold">{goal.title}</h2>
 
-              <div className="mt-5">
-                <div className="flex justify-between text-sm">
-                  <span>Progress</span>
-                  <span>{goal.progress}%</span>
+                {goal.description && (
+                  <p className="mt-2 text-sm text-slate-400">
+                    {goal.description}
+                  </p>
+                )}
+
+                <div className="mt-5">
+                  <div className="flex justify-between text-sm">
+                    <span>Progress</span>
+                    <span>{progress}%</span>
+                  </div>
+
+                  <div className="mt-2 h-3 rounded-full bg-slate-800">
+                    <div
+                      className="h-3 rounded-full bg-white"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
                 </div>
 
-                <div className="mt-2 h-3 rounded-full bg-slate-800">
-                  <div
-                    className="h-3 rounded-full bg-white"
-                    style={{ width: `${goal.progress}%` }}
-                  />
-                </div>
+                <ul className="mt-5 space-y-2">
+                  {goal.tasks.map((task) => (
+                    <li
+                      key={task.id}
+                      className="flex items-center justify-between rounded-xl bg-slate-800 px-4 py-3 text-sm"
+                    >
+                      <span>{task.title}</span>
+                      <span>{task.completed ? "Done" : "Open"}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-
-              <ul className="mt-5 space-y-2">
-                {goal.tasks.map((task) => (
-                  <li
-                    key={task.title}
-                    className="flex items-center justify-between rounded-xl bg-slate-800 px-4 py-3 text-sm"
-                  >
-                    <span>{task.title}</span>
-                    <span>{task.completed ? "Done" : "Open"}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
     </main>
   );
 };
+
+// Works because in the App Router, pages are Server 
+// Components by default, so page can directly fetch 
+// server side data.For API-style endpoints later, Next.js 
+// uses Route Handlers inside the app directory, supporting
+// methods like GET POST PUT PATCH DELETE
