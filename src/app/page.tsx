@@ -5,8 +5,7 @@
 //  Put prisma fetch into API ROUTES layer
 //  This is not the final pretty dashboard. This is just the
 //  first real connection between your frontend and backend.
-
-
+// 6-25 ADDED Create Goal Function 
 "use client"; //  is a React directive that marks the boundary between server-rendered and client-rendered code. It tells the bundler to ship a component's JavaScript to the browser, making it interactive
 import {useEffect, useState } from "react"
 
@@ -32,6 +31,7 @@ export default function Home() {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
   useEffect(()=> {
     async function fetchGoals(){
       try{
@@ -52,6 +52,33 @@ export default function Home() {
     fetchGoals();
   
   }, []);
+  
+  //dashboard for adding goal
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  async function handleCreateGoal(event: React.FormEvent<HTMLFormElement>){
+    event.preventDefault();
+
+    const response = await fetch( "/api/goals",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        description,
+      }),
+    });
+    if (!response.ok){
+      console.error("Failed to create goal");
+      return;
+    }
+
+    setTitle("");
+    setDescription("");
+    await fetchGoals():
+  }
 
   if(loading){
     return<main>Loading Goals...</main>
