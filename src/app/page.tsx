@@ -32,25 +32,27 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(()=> {
-    async function fetchGoals(){
-      try{
-        const response = await fetch("/api/goals");
-        if(!response.ok){
-          throw new Error("Failed to fetch goals");
-        }
-        const data = await response.json();
-        setGoals(data);
+  // fetches the goals
+  async function fetchGoals(){
+    try{
+      const response = await fetch("/api/goals");
+      if(!response.ok){
+        throw new Error("Failed to fetch goals");
       }
-      catch (err){
-        setError("Could not load goals.");
-      }
-      finally{
-        setLoading(false);
-      }
+      const data = await response.json();
+      setGoals(data);
     }
+    catch (err){
+      setError("Could not load goals.");
+    }
+    finally{
+      setLoading(false);
+    }
+  }
+
+
+  useEffect(()=> {
     fetchGoals();
-  
   }, []);
   
   //dashboard for adding goal
@@ -70,14 +72,18 @@ export default function Home() {
         description,
       }),
     });
+    //prevents page from pretending goal was created if API failed
     if (!response.ok){
       console.error("Failed to create goal");
       return;
     }
 
+    // clears the form after sucessful submit
     setTitle("");
     setDescription("");
-    await fetchGoals():
+
+    //refreshes dashboard with newest database data
+    await  fetchGoals(); //made this global
   }
 
   if(loading){
@@ -90,6 +96,21 @@ export default function Home() {
  return (
   <main>
     <h1>Memotive Dashboard</h1>
+    {/* form for adding a goal */}
+    {/* actually connects the form to function*/}
+    <form onSubmit={handleCreateGoal}> 
+      <input
+        value={title}
+        onChange={(event)=> setTitle(event.target.value)}
+        placeholder="Goal title"
+      />
+      <input
+        value={description}
+        onChange={(event) => setDescription(event.target.value)}
+        placeholder="Goal description"
+      />
+      <button type="submit">Create Goal</button>
+    </form>
     {/* added for error check */}
     <p>Goal count: {goals.length}</p> 
     {goals.map((goal) => (
