@@ -3,6 +3,8 @@
 // REMOVED STATIC DATABASE MODULE
 // 6-25 ADDED Client-side fetch with useEffect
 //  Put prisma fetch into API ROUTES layer
+//  This is not the final pretty dashboard. This is just the
+//  first real connection between your frontend and backend.
 
 
 "use client"; //  is a React directive that marks the boundary between server-rendered and client-rendered code. It tells the bundler to ship a component's JavaScript to the browser, making it interactive
@@ -58,18 +60,21 @@ export default function Home() {
     return<main>{error}</main>
   }
 
-  return (
-    <main>
-      <h1>Memotive Dashboard</h1>
-      {goals.map((goal)=>(
-        <section key={goal.id}>
-          <h2>{goal.title}</h2>
-          <p>Progress: {goal.progress}%</p>
-          <p>Tasks: {goal.tasks.length}</p>
-        </section>
-      ))}
-    </main>
-  );
+ return (
+  <main>
+    <h1>Memotive Dashboard</h1>
+    {/* added for error check */}
+    <p>Goal count: {goals.length}</p> 
+    {goals.map((goal) => (
+      <section key={goal.id}>
+        <h2>{goal.title}</h2>
+        <p>{goal.description}</p>
+        <p>Progress: {goal.progress}%</p>
+        <p>Tasks: {goal.tasks.length}</p>
+      </section>
+    ))}
+  </main>
+);
 }
 
 

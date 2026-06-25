@@ -107,3 +107,53 @@ export async function GET(){
 // 2. Include each goal's tasks
 // 3. Add progress to each goal before returning JSON
 
+export async function POST(request: Request){
+    try{
+        const body = await request.json();
+
+        // error check
+
+        if (!body.title || typeof body.title !== "string" || body.title.trim() === ""){
+            return NextResponse.json(
+                {error: "Title is required"},
+                {status: 400}
+            )
+        }
+
+        const goal = await prisma.goal.create({
+            data:{
+                title: body.title,
+                description: body.description || null,
+            }
+        });
+
+        return NextResponse.json(goal, {status: 201});
+        // status 201 means created succsesfully
+        // common repsponse for a post function
+    }
+    catch(error){
+        console.error("Failed to create goal:", error);
+
+        return NextResponse.json(
+            {error: "Failed to create goal"},
+            {status: 500}
+            //status 500 means
+        );
+    }
+}
+
+// What is the Purpose of POST /api/goals? 
+// CREATES A NEW GOAL
+
+//FLOW:
+// User fills out form
+//   ↓
+// Frontend sends goal data to /api/goals
+//   ↓
+// POST function receives the data
+//   ↓
+// Prisma creates a goal in the database
+//   ↓
+// API returns the newly created goal
+//   ↓
+// Dashboard can display it
