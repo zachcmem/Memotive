@@ -129,6 +129,22 @@ export default function Home() {
     await fetchGoals();
   }
 
+  async function handleToggleTask(taskId: string){
+    // calls the PATCH function
+    const response = await fetch(`/api/tasks/${taskId}`,{
+      method: "PATCH",
+    });
+
+    // error check response
+    if (!response.ok){
+      console.error("Failed to update task");
+      return;
+    }
+
+    // refreshes dashboard
+    await fetchGoals();
+  }
+
   if(loading){
     return<main>Loading Goals...</main>
   }
@@ -167,7 +183,10 @@ export default function Home() {
         <ul>
           {goal.tasks.map((task) => (
             <li key={task.id}>
-              {task.title} - {task.completed ? "Done" : "Not done"}
+              <button onClick={()=> handleToggleTask(task.id)}>
+                {task.completed ? "✅" : "⬜"}
+              </button>
+              {task.title}
             </li>
           ))}
         </ul>
