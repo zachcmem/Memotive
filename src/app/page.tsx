@@ -62,6 +62,7 @@ export default function Home() {
   async function handleCreateGoal(event: React.FormEvent<HTMLFormElement>){
     event.preventDefault();
     console.log("Creating goal:", title, description); // console log
+    // calls the POST endpoint here
     const response = await fetch( "/api/goals",{
       method: "POST",
       headers: {
@@ -85,6 +86,47 @@ export default function Home() {
     //refreshes dashboard with newest database data
     console.log("Goal created. Refetching goals...");
     await  fetchGoals(); //made this global
+  }
+
+  // ADDING TASKS TO EACH GOAL
+
+  const [taskTitles, setTaskTitles] = useState<Record<string,string>>({});
+  async function handleCreateTask(
+    event: React.FormEvent<HTMLFormElement>,
+    goalId: string //every task must be attributed to a goalId
+    ){
+    event.preventDefault();
+    // grabs the task title for the specific gaol
+    const taskTitle = taskTitles[goalId];
+    // call our post function HERE
+    const response = await fetch("/api/tasks",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+
+      },
+      //this is sent to API
+      body: JSON.stringify({
+        title: taskTitle,
+        goalId,
+      }),
+
+    });
+
+    // error handling incase its not valid
+    if (!response.ok) {
+      console.error("Failed to create task");
+      return;
+    }
+
+    //clears only that goals task input 
+    setTaskTitles((currentTaskTitles)=>({
+      ...currentTaskTitles,
+      [goalId]: "",
+
+    }));
+    // refreshes dashboard
+    await fetchGoals();
   }
 
   if(loading){
@@ -113,6 +155,7 @@ export default function Home() {
       />
       <button type="submit">Create Goal</button>
     </form>
+    
     {/* added for error check */}
     <p>Goal count: {goals.length}</p> 
     {goals.map((goal) => (
@@ -120,7 +163,26 @@ export default function Home() {
         <h2>{goal.title}</h2>
         <p>{goal.description}</p>
         <p>Progress: {goal.progress}%</p>
-        <p>Tasks: {goal.tasks.length}</p>
+        <h3>Tasks:</h3>
+        <ul>
+          {goal.tasks.map((task) => (
+            <li key={task.id}>
+              {task.title} - {task.completed ? "Done" : "Not done"}
+            </li>
+          ))}
+        </ul>
+        <form onSubmit={(event)=> handleCreateTask(event, goal.id)}>
+          <input
+            value= {taskTitles[goal.id] || ""}
+            onChange={(event)=> 
+              setTaskTitles((currentTaskTitles) => ({
+                ...currentTaskTitles,
+                [goal.id]: event.target.value,
+              }))
+            }
+            placeholder="New Task"
+          />
+        </form>
       </section>
     ))}
   </main>
