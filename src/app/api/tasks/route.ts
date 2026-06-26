@@ -11,7 +11,7 @@
 
 // prisma creates
 // {
-//   title: body.title,
+//   title: body.t itle,
 //   goalId: body.goalId
 // }
 
