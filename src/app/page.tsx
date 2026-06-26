@@ -172,7 +172,7 @@ export default function Home() {
       <button type="submit">Create Goal</button>
     </form>
     
-    {/* added for error check */}
+    {/* added for error  check */}
     <p>Goal count: {goals.length}</p> 
     {goals.map((goal) => (
       <section key={goal.id}>
