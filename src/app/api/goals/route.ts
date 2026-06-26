@@ -126,7 +126,7 @@ export async function POST(request: Request){
                 description: body.description || null,
             }
         });
-
+        
         return NextResponse.json(goal, {status: 201});
         // status 201 means created succsesfully
         // common repsponse for a post function

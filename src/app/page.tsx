@@ -61,7 +61,7 @@ export default function Home() {
 
   async function handleCreateGoal(event: React.FormEvent<HTMLFormElement>){
     event.preventDefault();
-
+    console.log("Creating goal:", title, description); // console log
     const response = await fetch( "/api/goals",{
       method: "POST",
       headers: {
@@ -83,6 +83,7 @@ export default function Home() {
     setDescription("");
 
     //refreshes dashboard with newest database data
+    console.log("Goal created. Refetching goals...");
     await  fetchGoals(); //made this global
   }
 
@@ -100,6 +101,7 @@ export default function Home() {
     {/* actually connects the form to function*/}
     <form onSubmit={handleCreateGoal}> 
       <input
+        // without onChange, typing wont update react state
         value={title}
         onChange={(event)=> setTitle(event.target.value)}
         placeholder="Goal title"
