@@ -66,3 +66,25 @@ export async function PATCH(request: Request, {params}: RouteParams){
         );
     }
 }
+
+export async function DELETE( request: Request, {params}: { params: {id:string}}){
+    try{
+        const {id} = params;
+        await prisma.task.delete({
+            where: {
+                id,
+            }
+        });
+        return NextResponse.json(
+            {message: "Task deleted sucessfully"},
+            {status: 200}
+        );
+    }
+    catch(error){
+        console.error("Failed to delete task:", error);
+        return NextResponse.json(
+        { error: "Failed to delete task" },
+        { status: 500 }
+        );
+    }
+}
