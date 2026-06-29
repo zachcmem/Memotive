@@ -6,6 +6,8 @@
 //  This is not the final pretty dashboard. This is just the
 //  first real connection between your frontend and backend.
 // 6-25 ADDED Create Goal Function 
+// 6-26 ADDED Create Task Function / Completion toggie
+// 6-26 ADDED New Enhanced UI
 "use client"; //  is a React directive that marks the boundary between server-rendered and client-rendered code. It tells the bundler to ship a component's JavaScript to the browser, making it interactive
 import {useEffect, useState } from "react"
 
@@ -153,57 +155,74 @@ export default function Home() {
   }
 
  return (
-  <main>
-    <h1>Memotive Dashboard</h1>
+  <main className="min-h-screen bg-black text-white p-8">
+    <header className="mb-8">
+      <h1 className="text-3xl text-neutral font-bold ">Memotive Dashboard</h1>
+      <p className="text-neutral-100 font-bold">Track your goals, tasks, and progress.</p>
+    </header>
     {/* form for adding a goal */}
     {/* actually connects the form to function*/}
-    <form onSubmit={handleCreateGoal}> 
-      <input
-        // without onChange, typing wont update react state
-        value={title}
-        onChange={(event)=> setTitle(event.target.value)}
-        placeholder="Goal title"
-      />
-      <input
-        value={description}
-        onChange={(event) => setDescription(event.target.value)}
-        placeholder="Goal description"
-      />
-      <button type="submit">Create Goal</button>
-    </form>
+    <section className="mb-8 rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow space-y-6">
+      <form onSubmit={handleCreateGoal}> 
+        <input
+          // without onChange, typing wont update react state
+          className="rounded border border-black bg-emerald-100 px-3 py-2 text-black placeholder:text-black"
+          value={title}
+          onChange={(event)=> setTitle(event.target.value)}
+          placeholder="Goal title"
+        />
+        &nbsp;&nbsp;
+        <input
+          className="rounded border border-black bg-emerald-100 px-3 py-2 text-black placeholder:text-black"
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+          placeholder="Goal description"
+        />
+        &nbsp;&nbsp;
+        <button className="rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200 space-y-6" type="submit">Create Goal</button>
+      </form>
+    </section>
     
     {/* added for error  check */}
-    <p>Goal count: {goals.length}</p> 
-    {goals.map((goal) => (
-      <section key={goal.id}>
-        <h2>{goal.title}</h2>
-        <p>{goal.description}</p>
-        <p>Progress: {goal.progress}%</p>
-        <h3>Tasks:</h3>
-        <ul>
-          {goal.tasks.map((task) => (
-            <li key={task.id}>
-              <button onClick={()=> handleToggleTask(task.id)}>
-                {task.completed ? "✅" : "⬜"}
-              </button>
-              {task.title}
-            </li>
-          ))}
-        </ul>
-        <form onSubmit={(event)=> handleCreateTask(event, goal.id)}>
-          <input
-            value= {taskTitles[goal.id] || ""}
-            onChange={(event)=> 
-              setTaskTitles((currentTaskTitles) => ({
-                ...currentTaskTitles,
-                [goal.id]: event.target.value,
-              }))
-            }
-            placeholder="New Task"
-          />
-        </form>
-      </section>
-    ))}
+    <div className=" space-y-6">
+      {goals.map((goal) => (
+        <section key={goal.id} className="rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
+          <h2 className="text-2xl font-bold">{goal.title}</h2>
+          <p className="mb-4 font-bold">{goal.description}</p>
+          <p className="mb-2 text-sm text-teal-200">Progress: {goal.progress}%</p>
+          <div className="mb-2 h-3 w-full rounded-full bg-gray-200">
+            <div
+              className=" h-3 rounded-full bg-teal-200"
+              style={{ width: `${goal.progress}%` }}
+            />
+          </div>
+          <h3 className="mb-2 text-1xl font-bold">Tasks:</h3>
+          <ul>
+            {goal.tasks.map((task) => (
+              <li key={task.id}>
+                <button className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200" onClick={()=> handleToggleTask(task.id)}>
+                  {task.completed ? "☑︎" : "☐"}
+                </button>
+                  &nbsp;&nbsp;{task.title}
+              </li>
+            ))}
+          </ul>
+          <form onSubmit={(event)=> handleCreateTask(event, goal.id)}>
+            <input
+              className="rounded border border-black bg-emerald-100 px-3 py-2 text-black placeholder:text-black"
+              value= {taskTitles[goal.id] || ""}
+              onChange={(event)=> 
+                setTaskTitles((currentTaskTitles) => ({
+                  ...currentTaskTitles,
+                  [goal.id]: event.target.value,
+                }))
+              }
+              placeholder="New Task"
+            />
+          </form>
+        </section>
+      ))}
+    </div>
   </main>
 );
 }
