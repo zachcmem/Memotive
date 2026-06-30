@@ -147,6 +147,22 @@ export default function Home() {
     await fetchGoals();
   }
 
+  async function handleDeleteTask(taskId: string){
+    //define the response, calls the DELETE function
+    const response = await fetch(`/api/tasks/${taskId}`,{
+      method: "DELETE",
+    });
+
+    //make sure the response came back alright
+    if(!response.ok){
+      console.error("Failed to delete task");
+      return;
+    }
+
+    //refresh dashboard
+    await fetchGoals();
+  }
+
   if(loading){
     return<main>Loading Goals...</main>
   }
@@ -200,10 +216,18 @@ export default function Home() {
           <ul>
             {goal.tasks.map((task) => (
               <li key={task.id}>
-                <button className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200" onClick={()=> handleToggleTask(task.id)}>
+                <button 
+                  className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200" 
+                  onClick={()=> handleToggleTask(task.id)}>
                   {task.completed ? "☑︎" : "☐"}
                 </button>
                   &nbsp;&nbsp;{task.title}
+                <button
+                  type="button"
+                  onClick={()=> handleDeleteTask(task.id)}
+                  className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200" >
+                    Delete
+                </button>
               </li>
             ))}
           </ul>
