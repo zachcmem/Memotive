@@ -158,15 +158,3 @@ export async function POST(request: Request){
 //   ↓
 // Dashboard can display it
 
-// export async function DELETE(request: Request){
-//     try{
-
-//     }
-//     catch(error){
-//         console.error("Failed to delete goal", error)
-//         return NextResponse.json(
-//             {error: "Failed to delete goal"},
-//             {status: 500}
-//         )
-//     }
-// }
