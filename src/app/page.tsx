@@ -177,6 +177,11 @@ export default function Home() {
     await fetchGoals();
   }
 
+  //three dot menu open / close state
+  //    null = no menu open
+  //    goal.id = this goal's menu is open
+  const [openGoalMenuId, setOpenGoalMenuId] = useState<string | null>(null);
+
   if(loading){
     return<main>Loading Goals...</main>
   }
@@ -196,14 +201,14 @@ export default function Home() {
       <form onSubmit={handleCreateGoal}> 
         <input
           // without onChange, typing wont update react state
-          className="rounded border border-black bg-emerald-100 px-3 py-2 text-black placeholder:text-black"
+          className="rounded border border-black bg-teal-200 px-3 py-2 text-black placeholder:text-black"
           value={title}
           onChange={(event)=> setTitle(event.target.value)}
           placeholder="Goal title"
         />
         &nbsp;&nbsp;
         <input
-          className="rounded border border-black bg-emerald-100 px-3 py-2 text-black placeholder:text-black"
+          className="rounded border border-black bg-teal-200 px-3 py-2 text-black placeholder:text-black"
           value={description}
           onChange={(event) => setDescription(event.target.value)}
           placeholder="Goal description"
@@ -216,16 +221,44 @@ export default function Home() {
     {/* added for error  check */}
     <div className=" space-y-6">
       {goals.map((goal) => (
-        <section key={goal.id} className="rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
+        // relative matters because it lets you position menu inside card
+        <section key={goal.id} className="relative rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
+          
+          {/* MENU OPTION BUTTON */}
+          <button
+            type="button"
+            onClick={()=> setOpenGoalMenuId(openGoalMenuId === goal.id ? null : goal.id)}
+            className="absolute right-4 top-4 rounded px-2 py-1 bg-teal-200 font-medium text-black hover:bg-teal-200"
+          >
+          ...</button>
+          
+          {openGoalMenuId === goal.id && (
+            <div className="absolute right-4 top-12 z-10 w-32 rounded-lg border border-slate-700 bg-slate-800 p-2 shadow-lg">
+              <button
+                type="button"
+                className="block w-full rounded px-3 py-2 text-left text-sm text-slate-200 hover:bg-slate-700"
+              >
+                Edit
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleDeleteGoal(goal.id)}
+                className="block w-full rounded px-3 py-2 text-left text-sm text-red-400 hover:bg-slate-700"
+              >
+                Delete
+              </button>
+            </div>
+          )}
+
           <h2 className="text-2xl font-bold">{goal.title}</h2>
           <p className="mb-4 font-bold">{goal.description}</p>
-
           {/* TEMPORARY BUTTON FOR HANDLING DELETE GOALS */}
-          <button
+          {/* <button
             type="button"
             onClick={()=> handleDeleteGoal(goal.id)}
             className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200"
-          >DELETE GOAL</button>
+          >DELETE GOAL</button> */}
           <p className="mb-2 text-sm text-teal-200">Progress: {goal.progress}%</p>
           <div className="mb-2 h-3 w-full rounded-full bg-gray-200">
             <div
@@ -242,11 +275,11 @@ export default function Home() {
                   onClick={()=> handleToggleTask(task.id)}>
                   {task.completed ? "☑︎" : "☐"}
                 </button>
-                  &nbsp;&nbsp;{task.title}
+                  &nbsp;&nbsp;{task.title}&nbsp;&nbsp;
                 <button
                   type="button"
                   onClick={()=> handleDeleteTask(task.id)}
-                  className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200" >
+                  className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200" >
                     Delete
                 </button>
               </li>
@@ -254,7 +287,7 @@ export default function Home() {
           </ul>
           <form onSubmit={(event)=> handleCreateTask(event, goal.id)}>
             <input
-              className="rounded border border-black bg-emerald-100 px-3 py-2 text-black placeholder:text-black"
+              className="rounded border border-black bg-teal-200 px-3 py-2 text-black placeholder:text-black"
               value= {taskTitles[goal.id] || ""}
               onChange={(event)=> 
                 setTaskTitles((currentTaskTitles) => ({
