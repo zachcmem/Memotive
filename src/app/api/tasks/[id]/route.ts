@@ -67,14 +67,30 @@ export async function PATCH(request: Request, {params}: RouteParams){
     }
 }
 
-export async function DELETE( request: Request, {params}: { params: {id:string}}){
+export async function DELETE( request: Request, {params}: RouteParams){
     try{
-        const {id} = params;
+        const {id} = await params;
+
+        // checks if task ID actually exists
+        const existingTask = await prisma.task.findUnique({
+            where: {
+                id,
+            }
+        });
+
+        if (!existingTask){
+            return NextResponse.json(
+                {error: "Task not found"},
+                {status: 404}
+            )
+        };
+
         await prisma.task.delete({
             where: {
                 id,
             }
         });
+
         return NextResponse.json(
             {message: "Task deleted sucessfully"},
             {status: 200}
