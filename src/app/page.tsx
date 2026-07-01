@@ -1,15 +1,7 @@
-// MAIN PAGE -> DEEP DIVE
 
-// REMOVED STATIC DATABASE MODULE
-// 6-25 ADDED Client-side fetch with useEffect
-//  Put prisma fetch into API ROUTES layer
-//  This is not the final pretty dashboard. This is just the
-//  first real connection between your frontend and backend.
-// 6-25 ADDED Create Goal Function 
-// 6-26 ADDED Create Task Function / Completion toggie
-// 6-26 ADDED New Enhanced UI
 "use client"; //  is a React directive that marks the boundary between server-rendered and client-rendered code. It tells the bundler to ship a component's JavaScript to the browser, making it interactive
 import {useEffect, useState } from "react"
+import GoalCard from "./components/GoalCard";
 
 // Tells TypeScript about the SHAPE OF DATA
 //    Later when we map the goals to the dash, type knows what goals contain
@@ -218,87 +210,23 @@ export default function Home() {
       </form>
     </section>
     
-    {/* added for error  check */}
     <div className=" space-y-6">
+      {/* list all the goals (GoalCard component) */}
       {goals.map((goal) => (
-        // relative matters because it lets you position menu inside card
-        <section key={goal.id} className="relative rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
-          
-          {/* MENU OPTION BUTTON */}
-          <button
-            type="button"
-            onClick={()=> setOpenGoalMenuId(openGoalMenuId === goal.id ? null : goal.id)}
-            className="absolute right-4 top-4 rounded px-2 py-1 bg-teal-200 font-medium text-black hover:bg-teal-200"
-          >
-          ...</button>
-          
-          {openGoalMenuId === goal.id && (
-            <div className="absolute right-4 top-12 z-10 w-32 rounded-lg border border-slate-700 bg-slate-800 p-2 shadow-lg">
-              <button
-                type="button"
-                className="block w-full rounded px-3 py-2 text-left text-sm text-slate-200 hover:bg-slate-700"
-              >
-                Edit
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleDeleteGoal(goal.id)}
-                className="block w-full rounded px-3 py-2 text-left text-sm text-red-400 hover:bg-slate-700"
-              >
-                Delete
-              </button>
-            </div>
-          )}
-
-          <h2 className="text-2xl font-bold">{goal.title}</h2>
-          <p className="mb-4 font-bold">{goal.description}</p>
-          {/* TEMPORARY BUTTON FOR HANDLING DELETE GOALS */}
-          {/* <button
-            type="button"
-            onClick={()=> handleDeleteGoal(goal.id)}
-            className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200"
-          >DELETE GOAL</button> */}
-          <p className="mb-2 text-sm text-teal-200">Progress: {goal.progress}%</p>
-          <div className="mb-2 h-3 w-full rounded-full bg-gray-200">
-            <div
-              className=" h-3 rounded-full bg-teal-200"
-              style={{ width: `${goal.progress}%` }}
-            />
-          </div>
-          <h3 className="mb-2 text-1xl font-bold">Tasks:</h3>
-          <ul>
-            {goal.tasks.map((task) => (
-              <li key={task.id}>
-                <button 
-                  className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200" 
-                  onClick={()=> handleToggleTask(task.id)}>
-                  {task.completed ? "☑︎" : "☐"}
-                </button>
-                  &nbsp;&nbsp;{task.title}&nbsp;&nbsp;
-                <button
-                  type="button"
-                  onClick={()=> handleDeleteTask(task.id)}
-                  className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200" >
-                    Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-          <form onSubmit={(event)=> handleCreateTask(event, goal.id)}>
-            <input
-              className="rounded border border-black bg-teal-200 px-3 py-2 text-black placeholder:text-black"
-              value= {taskTitles[goal.id] || ""}
-              onChange={(event)=> 
-                setTaskTitles((currentTaskTitles) => ({
-                  ...currentTaskTitles,
-                  [goal.id]: event.target.value,
-                }))
-              }
-              placeholder="New Task"
-            />
-          </form>
-        </section>
+        <GoalCard
+          // this is all passed to GoalCard.tsx, including 
+          // functions defined here in page.tsx
+          key={goal.id}
+          goal={goal}
+          openGoalMenuId={openGoalMenuId}
+          setOpenGoalMenuId={setOpenGoalMenuId}
+          handleDeleteGoal={handleDeleteGoal}
+          handleToggleTask={handleToggleTask}
+          handleCreateTask={handleCreateTask}
+          handleDeleteTask={handleDeleteTask}
+          taskTitles={taskTitles}
+          setTaskTitles={setTaskTitles}
+        />
       ))}
     </div>
   </main>
