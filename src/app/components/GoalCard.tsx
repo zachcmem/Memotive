@@ -5,6 +5,10 @@
 //Goal card uses handlers, forms, and React state setters, 
 // therefore it shouldbe a client component
 "use client";
+
+// imports of other components here
+import TaskList from "./TaskList";
+//type delcaration, including props 
 type Task = {
   id: string
   title: string
@@ -94,26 +98,12 @@ export default function GoalCard({
                 />
             </div>
 
-            <h3 className="mb-2 text-1xl font-bold">Tasks:</h3>
-
-            <ul>
-                {goal.tasks.map((task) => (
-                    <li key={task.id}>
-                        <button 
-                            className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200" 
-                            onClick={()=> handleToggleTask(task.id)}>
-                            {task.completed ? "☑︎" : "☐"}
-                        </button>
-                        &nbsp;&nbsp;{task.title}&nbsp;&nbsp;
-                        <button
-                            type="button"
-                            onClick={()=> handleDeleteTask(task.id)}
-                            className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200" >
-                            Delete
-                        </button>
-                    </li>
-                ))}
-            </ul>
+            <TaskList
+                tasks={goal.tasks}
+                handleToggleTask={handleToggleTask}
+                handleDeleteTask={handleDeleteTask}
+            />
+            
 
             <form onSubmit={(event)=> handleCreateTask(event, goal.id)}>
                 <input
