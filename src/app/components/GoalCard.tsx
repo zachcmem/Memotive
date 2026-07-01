@@ -8,6 +8,7 @@
 
 // imports of other components here
 import TaskList from "./TaskList";
+import ProgressBar from "./ProgressBar";
 //type delcaration, including props 
 type Task = {
   id: string
@@ -87,16 +88,9 @@ export default function GoalCard({
 
             <p className="mb-4 font-bold">{goal.description}</p>
 
-            <p className="mb-2 text-sm text-teal-200">
-                Progress: {goal.progress}%
-            </p>
-
-            <div className="mb-2 h-3 w-full rounded-full bg-gray-200">
-                <div
-                    className=" h-3 rounded-full bg-teal-200"
-                    style={{ width: `${goal.progress}%` }}
-                />
-            </div>
+            <ProgressBar
+                progress={goal.progress}
+            />
 
             <TaskList
                 tasks={goal.tasks}
