@@ -9,6 +9,7 @@
 // imports of other components here
 import TaskList from "./TaskList";
 import ProgressBar from "./ProgressBar";
+import ThreeDotMenu from "./ThreeDotMenu";
 //type delcaration, including props 
 type Task = {
   id: string
@@ -56,33 +57,12 @@ export default function GoalCard({
     return(
         <section className="relative rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
             
-            {/* MENU OPTION BUTTON */}
-            <button
-            type="button"
-            onClick={()=> setOpenGoalMenuId(openGoalMenuId === goal.id ? null : goal.id)}
-            className="absolute right-4 top-4 rounded px-2 py-1 bg-teal-200 font-medium text-black hover:bg-teal-200"
-            >
-                ...
-            </button>
-            
-            {openGoalMenuId === goal.id && (
-            <div className="absolute right-4 top-12 z-10 w-32 rounded-lg border border-slate-700 bg-slate-800 p-2 shadow-lg">
-                <button
-                type="button"
-                className="block w-full rounded px-3 py-2 text-left text-sm text-slate-200 hover:bg-slate-700"
-                >
-                    Edit
-                </button>
-
-                <button
-                type="button"
-                onClick={() => handleDeleteGoal(goal.id)}
-                className="block w-full rounded px-3 py-2 text-left text-sm text-red-400 hover:bg-slate-700"
-                >
-                    Delete
-                </button>
-            </div>
-            )}
+            <ThreeDotMenu
+                itemId={goal.id}
+                openMenuId={openGoalMenuId}
+                setOpenMenuId={setOpenGoalMenuId}
+                onDelete={handleDeleteGoal}
+            />
 
             <h2 className="text-2xl font-bold">{goal.title}</h2>
 
