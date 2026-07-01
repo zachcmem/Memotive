@@ -2,6 +2,9 @@
 //TaskList uses buttons like onClick, should be client
 "use client";
 
+//imports of child components
+import TaskItem from "./TaskItem";
+
 // type delcarations
 
 type Task = {
@@ -32,20 +35,13 @@ export default function TaskList({
             <ul>
                 {/* only tasked are passed in, instead of goal */}
                 {tasks.map((task) => (
-                    <li key={task.id}>
-                        <button 
-                            className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200" 
-                            onClick={()=> handleToggleTask(task.id)}>
-                            {task.completed ? "☑︎" : "☐"}
-                        </button>
-                        &nbsp;&nbsp;{task.title}&nbsp;&nbsp;
-                        <button
-                            type="button"
-                            onClick={()=> handleDeleteTask(task.id)}
-                            className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200" >
-                            Delete
-                        </button>
-                    </li>
+                    <TaskItem
+                        // must have a key inside a map
+                        key={task.id}
+                        task={task}
+                        handleToggleTask={handleToggleTask}
+                        handleDeleteTask={handleDeleteTask}
+                    />
                 ))}
             </ul>
         </>
