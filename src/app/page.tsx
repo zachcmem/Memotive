@@ -108,7 +108,7 @@ export default function Home() {
           goal.id === goalId
             ?{
               ... goal,
-              tasks:[...goal.tasks, newTask],
+              tasks:[...(goal.tasks ?? []), newTask],
             }
             : goal
         )
