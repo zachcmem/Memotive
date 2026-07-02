@@ -2,6 +2,7 @@
 "use client"; //  is a React directive that marks the boundary between server-rendered and client-rendered code. It tells the bundler to ship a component's JavaScript to the browser, making it interactive
 import {useEffect, useState } from "react"
 import GoalCard from "./components/GoalCard";
+import AddGoalForm from "./components/AddGoalForm";
 
 // Tells TypeScript about the SHAPE OF DATA
 //    Later when we map the goals to the dash, type knows what goals contain
@@ -189,26 +190,13 @@ export default function Home() {
     </header>
     {/* form for adding a goal */}
     {/* actually connects the form to function*/}
-    <section className="mb-8 rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow space-y-6">
-      <form onSubmit={handleCreateGoal}> 
-        <input
-          // without onChange, typing wont update react state
-          className="rounded border border-black bg-teal-200 px-3 py-2 text-black placeholder:text-black"
-          value={title}
-          onChange={(event)=> setTitle(event.target.value)}
-          placeholder="Goal title"
-        />
-        &nbsp;&nbsp;
-        <input
-          className="rounded border border-black bg-teal-200 px-3 py-2 text-black placeholder:text-black"
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-          placeholder="Goal description"
-        />
-        &nbsp;&nbsp;
-        <button className="rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200 space-y-6" type="submit">Create Goal</button>
-      </form>
-    </section>
+    <AddGoalForm
+      title={title}
+      description={description}
+      setTitle={setTitle}
+      setDescription={setDescription}
+      handleCreateGoal={handleCreateGoal}
+    />
     
     <div className=" space-y-6">
       {/* list all the goals (GoalCard component) */}

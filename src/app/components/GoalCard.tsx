@@ -10,6 +10,8 @@
 import TaskList from "./TaskList";
 import ProgressBar from "./ProgressBar";
 import ThreeDotMenu from "./ThreeDotMenu";
+import AddTaskForm from "./AddTaskForm";
+
 //type delcaration, including props 
 type Task = {
   id: string
@@ -78,20 +80,13 @@ export default function GoalCard({
                 handleDeleteTask={handleDeleteTask}
             />
             
-
-            <form onSubmit={(event)=> handleCreateTask(event, goal.id)}>
-                <input
-                    className="rounded border border-black bg-teal-200 px-3 py-2 text-black placeholder:text-black"
-                    value= {taskTitles[goal.id] || ""}
-                    onChange={(event)=> 
-                    setTaskTitles((currentTaskTitles) => ({
-                        ...currentTaskTitles,
-                        [goal.id]: event.target.value,
-                    }))
-                    }
-                    placeholder="New Task"
-                />
-            </form>
+            <AddTaskForm
+                goalId = {goal.id}
+                taskTitles = {taskTitles}
+                setTaskTitles = {setTaskTitles}
+                handleCreateTask={handleCreateTask}
+            />
+            
         </section>
     );
 }
