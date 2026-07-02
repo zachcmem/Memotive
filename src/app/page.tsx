@@ -68,7 +68,17 @@ export default function Home() {
     try{
       // calls the function in lib/api.ts
       const newGoal = await createGoal(title, description);
-      setGoals((currentGoals) => [...currentGoals, newGoal]);
+
+      const goalWithDefaults = {
+        ...newGoal,
+        progress: newGoal.progress ?? 0,
+        // this line makes sure if newGoal.tasks exist, use it
+        //    but if it doesnt exist, use an empty array so it can map still
+        tasks: newGoal.tasks ?? [],
+      };
+
+      setGoals((currentGoals) => [...currentGoals, goalWithDefaults]);
+
       setTitle("");
       setDescription("");
     } 

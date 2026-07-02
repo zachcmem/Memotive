@@ -124,10 +124,18 @@ export async function POST(request: Request){
             data:{
                 title: body.title,
                 description: body.description || null,
-            }
+            },
+            include: {
+                tasks: true,
+            },
         });
         
-        return NextResponse.json(goal, {status: 201});
+        return NextResponse.json(
+            {
+                ...goal,
+                progress: 0,
+            },
+            {status: 201});
         // status 201 means created succsesfully
         // common repsponse for a post function
     }

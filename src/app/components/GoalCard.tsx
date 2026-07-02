@@ -75,7 +75,7 @@ export default function GoalCard({
             />
 
             <TaskList
-                tasks={goal.tasks}
+                tasks={goal.tasks ?? []} 
                 handleToggleTask={handleToggleTask}
                 handleDeleteTask={handleDeleteTask}
             />

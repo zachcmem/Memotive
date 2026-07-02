@@ -33,7 +33,7 @@ export async function deleteGoal(goalId: string){
 }
 
 export async function createTask(goalId: string, title: string){
-    const response = await fetch("/api/task", {
+    const response = await fetch("/api/tasks", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
