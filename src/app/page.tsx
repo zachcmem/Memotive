@@ -115,35 +115,36 @@ export default function Home() {
   }
 
   async function handleToggleTask(taskId: string){
-    // calls the PATCH function
-    const response = await fetch(`/api/tasks/${taskId}`,{
-      method: "PATCH",
-    });
 
-    // error check response
-    if (!response.ok){
-      console.error("Failed to update task");
-      return;
+    try{
+      const updatedTask = await toggleTask(taskId);
+      setGoals((currentGoals) => 
+        currentGoals.map((goal) => ({
+          ...goal,
+          tasks: goal.tasks.map((task)=>
+            task.id === taskId ? updatedTask : task
+          ),
+        }))
+      );
     }
-
-    // refreshes dashboard
-    await fetchGoals();
+    catch(error){
+      console.error("Failed to toggle task: ", error);
+    }
   }
 
   async function handleDeleteTask(taskId: string){
-    //define the response, calls the DELETE function
-    const response = await fetch(`/api/tasks/${taskId}`,{
-      method: "DELETE",
-    });
-
-    //make sure the response came back alright
-    if(!response.ok){
-      console.error("Failed to delete task");
-      return;
+    try{
+      await deleteTask(taskId);
+      setGoals((currentGoals) =>
+        currentGoals.map((goal)=>({
+          ...goal,
+          tasks: goal.tasks.filter((task) => task.id !== taskId),
+        }))
+      );
     }
-
-    //refresh dashboard
-    await fetchGoals();
+    catch(error){
+      console.error("Failed to delete task: ", error);
+    }
   }
 
   async function handleDeleteGoal(goalId: string){
