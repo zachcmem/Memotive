@@ -4,6 +4,14 @@ import {useEffect, useState } from "react"
 import GoalCard from "./components/GoalCard";
 import AddGoalForm from "./components/AddGoalForm";
 
+import{
+  createGoal,
+  deleteGoal,
+  createTask,
+  toggleTask,
+  deleteTask,
+} from "@/lib/api";
+
 // Tells TypeScript about the SHAPE OF DATA
 //    Later when we map the goals to the dash, type knows what goals contain
 // Task should have an id, title, and boolean
@@ -57,30 +65,16 @@ export default function Home() {
   async function handleCreateGoal(event: React.FormEvent<HTMLFormElement>){
     event.preventDefault();
     console.log("Creating goal:", title, description); // console log
-    // calls the POST endpoint here
-    const response = await fetch( "/api/goals",{
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title,
-        description,
-      }),
-    });
-    //prevents page from pretending goal was created if API failed
-    if (!response.ok){
-      console.error("Failed to create goal");
-      return;
+    try{
+      // calls the function in lib/api.ts
+      const newGoal = await createGoal(title, description);
+      setGoals((currentGoals) => [...currentGoals, newGoal]);
+      setTitle("");
+      setDescription("");
+    } 
+    catch (error){
+      console.error("Failed to create goal: ", error)
     }
-
-    // clears the form after sucessful submit
-    setTitle("");
-    setDescription("");
-
-    //refreshes dashboard with newest database data
-    console.log("Goal created. Refetching goals...");
-    await  fetchGoals(); //made this global
   }
 
   // ADDING TASKS TO EACH GOAL
@@ -93,35 +87,31 @@ export default function Home() {
     event.preventDefault();
     // grabs the task title for the specific gaol
     const taskTitle = taskTitles[goalId];
-    // call our post function HERE
-    const response = await fetch("/api/tasks",{
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-
-      },
-      //this is sent to API
-      body: JSON.stringify({
-        title: taskTitle,
-        goalId,
-      }),
-
-    });
-
-    // error handling incase its not valid
-    if (!response.ok) {
-      console.error("Failed to create task");
+    if (!taskTitle){
       return;
     }
+    try{
+      const newTask = await createTask(goalId, taskTitle);
 
-    //clears only that goals task input 
-    setTaskTitles((currentTaskTitles)=>({
-      ...currentTaskTitles,
-      [goalId]: "",
+      setGoals((currentGoals)=>
+        currentGoals.map((goal)=>
+          goal.id === goalId
+            ?{
+              ... goal,
+              tasks:[...goal.tasks, newTask],
+            }
+            : goal
+        )
+      );
 
-    }));
-    // refreshes dashboard
-    await fetchGoals();
+      setTaskTitles((currentTaskTitles)=>({
+        ...currentTaskTitles,
+        [goalId]: "",
+      }));
+    }
+    catch(error){
+      console.error("Failed to create task: ", error)
+    }
   }
 
   async function handleToggleTask(taskId: string){
@@ -157,17 +147,14 @@ export default function Home() {
   }
 
   async function handleDeleteGoal(goalId: string){
-    const response = await fetch(`/api/goals/${goalId}`, {
-      method: "DELETE",
-    });
+    try{
+      await deleteGoal(goalId);
 
-    // check if the response worked
-    if(!response.ok){
-      console.error("Failed to delete goal");
-      return;
+      setGoals((currentGoals)=>currentGoals.filter((goal)=> goal.id !== goalId));
     }
-
-    await fetchGoals();
+    catch(error){
+      console.error("Failed to delete goal: ", error);
+    }
   }
 
   //three dot menu open / close state
