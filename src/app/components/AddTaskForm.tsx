@@ -1,5 +1,6 @@
 "use client";
 
+// type declaration
 type AddTaskFormProps = {
     goalId: string;
     taskTitles: Record<string, string>
@@ -9,7 +10,6 @@ type AddTaskFormProps = {
         goalId : string
     ) => void;
 };
-
 
 export default function AddTaskForm({
     goalId,
