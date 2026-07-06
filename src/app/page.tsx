@@ -155,10 +155,25 @@ export default function Home() {
     try{
       await deleteTask(taskId);
       setGoals((currentGoals) =>
-        currentGoals.map((goal)=>({
-          ...goal,
-          tasks: goal.tasks.filter((task) => task.id !== taskId),
-        }))
+        currentGoals.map((goal)=> {
+          const goalHasTask = (goal.tasks ?? []).some(
+            (task) => task.id === taskId
+          );
+
+          if(!goalHasTask){
+           return goal; 
+          }
+
+          const updatedTasks = (goal.tasks ?? []).filter(
+            (task) => task.id !== taskId
+          );
+
+          return {
+            ...goal,
+            tasks: updatedTasks,
+            progress: calculateProgress(updatedTasks)
+          };
+        })
       );
     }
     catch(error){
