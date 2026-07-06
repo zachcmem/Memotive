@@ -106,14 +106,17 @@ export default function Home() {
       const newTask = await createTask(goalId, taskTitle);
 
       setGoals((currentGoals)=>
-        currentGoals.map((goal)=>
-          goal.id === goalId
-            ?{
-              ... goal,
-              tasks:[...(goal.tasks ?? []), newTask],
-            }
-            : goal
-        )
+        currentGoals.map((goal)=>{
+          if (goal.id !== goalId){
+            return goal;
+          }
+          const updatedTasks = [...(goal.tasks ?? []), newTask];
+          return {
+            ...goal,
+            tasks: updatedTasks,
+            progress: calculateProgress(updatedTasks),
+          };
+        })
       );
 
       setTaskTitles((currentTaskTitles)=>({
