@@ -10,6 +10,7 @@ import{
   createTask,
   toggleTask,
   deleteTask,
+  updateGoal,
 } from "@/lib/api";
 
 import { calculateProgress } from "@/lib/progress";

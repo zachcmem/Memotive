@@ -71,3 +71,26 @@ export async function deleteTask(taskId: string){
     }
     return response.json();
 }
+
+export async function updateGoal(
+    goalId: string,
+    data: {
+        title: string;
+        description: string;
+    }
+) {
+    const response = await fetch(`api/goals/${goalId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+
+    if(!response.ok){
+        throw new Error("Failed to update goal");
+    }
+
+    return response.json();
+}
+
