@@ -192,6 +192,29 @@ export default function Home() {
     }
   }
 
+  // before touching api route, make sure page.tsx can 
+  // update the goal inside goals state,
+  // this means, to find the goal with this id,
+  // replace its title and description, but 
+  // leave every other goal unchanged 
+  // then we can pass it into GoalCard.tsx
+  async function handleUpdateGoal(
+    goalId: string,
+    updatedTitle: string,
+    updatedDescription: string,
+  ){
+    setGoals((currentGoals) => 
+    currentGoals.map((goal)=> 
+      goal.id === goalId
+      ? {
+        ...goal,
+        title: updatedTitle,
+        description: updatedDescription,
+      }
+      : goal
+    ));
+  }
+
   //three dot menu open / close state
   //    null = no menu open
   //    goal.id = this goal's menu is open
@@ -234,6 +257,7 @@ export default function Home() {
           handleToggleTask={handleToggleTask}
           handleCreateTask={handleCreateTask}
           handleDeleteTask={handleDeleteTask}
+          handleUpdateGoal={handleUpdateGoal}
           taskTitles={taskTitles}
           setTaskTitles={setTaskTitles}
         />

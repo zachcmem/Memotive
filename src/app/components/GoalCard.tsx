@@ -42,6 +42,11 @@ type GoalCardProps = {
         event: React.FormEvent<HTMLFormElement>,
         goalId: string
     )=>void;
+    handleUpdateGoal: (
+        goalId: string,
+        updateTitle: string,
+        updateDescription : string
+    ) => void;
     taskTitles: Record<string,string>;
     setTaskTitles: React.Dispatch<React.SetStateAction<Record<string,string>>>;
 };
@@ -49,6 +54,7 @@ type GoalCardProps = {
 
 
 export default function GoalCard({ 
+    // props destructuring
     goal,
     openGoalMenuId,
     setOpenGoalMenuId,
@@ -56,12 +62,24 @@ export default function GoalCard({
     handleToggleTask,
     handleDeleteTask,
     handleCreateTask,
+    handleUpdateGoal,
     taskTitles,
     setTaskTitles,
 }: GoalCardProps){
+
+    //useStates for editing
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(goal.title);
     const [editedDescription, setEditedDescription] = useState(goal.description ?? "");
+
+    // handles the save editing button
+    //     classes the update goal function
+    //     sets editing state to false
+    function handleSaveEdit(){
+        handleUpdateGoal(goal.id, editedTitle, editedDescription);
+        setIsEditing(false);
+    }
+
     return(
         <section className="relative rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
             
@@ -72,6 +90,7 @@ export default function GoalCard({
                 onDelete={handleDeleteGoal}
                 onEdit={() => setIsEditing(true)}
             />
+
             {/* the state of the goalCard depends on if its editing or not */}
             {isEditing ? (   
                 <div className="space-y-3">
@@ -90,7 +109,7 @@ export default function GoalCard({
                     />
                     <div className="flex gap-2">
                         <button
-                            onClick={()=> setIsEditing(false)}
+                            onClick={handleSaveEdit}
                             className="rounded-md bg-teal-200 px-3 py-1 text-sm font-medium text-teal-900 hover:bg-teal-300"
                         >
                             Save
