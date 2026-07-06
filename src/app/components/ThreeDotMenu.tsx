@@ -8,6 +8,7 @@ type ThreeDotMenuProps = {
     openMenuId: string | null;
     setOpenMenuId: (itemId: string | null) => void;
     onDelete: (itemId: string) => void;
+    onEdit: () => void;
 }
 //function
 
@@ -15,7 +16,8 @@ export default function ThreeDotMenu({
     itemId,
     openMenuId,
     setOpenMenuId,
-    onDelete
+    onDelete,
+    onEdit,
 }: ThreeDotMenuProps){
     return(
         <>
@@ -32,6 +34,11 @@ export default function ThreeDotMenu({
             <div className="absolute right-4 top-12 z-10 w-32 rounded-lg border border-teal-200 bg-slate-800 p-2 shadow-lg">
                 <button
                 type="button"
+                onClick={()=> {
+                    console.log("Edit clicked");
+                    onEdit(); 
+                    setOpenMenuId(null);
+                }}
                 className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black bg-white hover:bg-teal-200"
                 >
                     Edit

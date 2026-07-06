@@ -11,6 +11,7 @@ import TaskList from "./TaskList";
 import ProgressBar from "./ProgressBar";
 import ThreeDotMenu from "./ThreeDotMenu";
 import AddTaskForm from "./AddTaskForm";
+import { useState } from "react";
 
 //type delcaration, including props 
 type Task = {
@@ -45,6 +46,8 @@ type GoalCardProps = {
     setTaskTitles: React.Dispatch<React.SetStateAction<Record<string,string>>>;
 };
 
+
+
 export default function GoalCard({ 
     goal,
     openGoalMenuId,
@@ -56,6 +59,9 @@ export default function GoalCard({
     taskTitles,
     setTaskTitles,
 }: GoalCardProps){
+    const [isEditing, setIsEditing] = useState(false);
+    const [editiedTitle, setEditedTitle] = useState(goal.title);
+    const [editedDescription, setEditedDescription] = useState(goal.description ?? "");
     return(
         <section className="relative rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
             
@@ -64,29 +70,38 @@ export default function GoalCard({
                 openMenuId={openGoalMenuId}
                 setOpenMenuId={setOpenGoalMenuId}
                 onDelete={handleDeleteGoal}
+                onEdit={() => setIsEditing(true)}
             />
+            {isEditing ? (
+                <p className="text-sm text-teal-700">Editing mode is on</p>
+            ) : (
+                <>
+                    <p className="text-sm text-slate-500">Normal mode</p>
 
-            <h2 className="text-2xl font-bold">{goal.title}</h2>
+                    <h2 className="text-2xl font-bold">{goal.title}</h2>
 
-            <p className="mb-4 font-bold">{goal.description}</p>
+                    <p className="mb-4 font-bold">{goal.description}</p>
 
-            <ProgressBar
-                progress={goal.progress}
-            />
+                    <ProgressBar
+                        progress={goal.progress}
+                    />
 
-            <TaskList
-                tasks={goal.tasks ?? []} 
-                handleToggleTask={handleToggleTask}
-                handleDeleteTask={handleDeleteTask}
-            />
-            
-            <AddTaskForm
-                goalId = {goal.id}
-                taskTitles = {taskTitles}
-                setTaskTitles = {setTaskTitles}
-                handleCreateTask={handleCreateTask}
-            />
-            
+                    <TaskList
+                        tasks={goal.tasks ?? []} 
+                        handleToggleTask={handleToggleTask}
+                        handleDeleteTask={handleDeleteTask}
+                    />
+                    
+                    <AddTaskForm
+                        goalId = {goal.id}
+                        taskTitles = {taskTitles}
+                        setTaskTitles = {setTaskTitles}
+                        handleCreateTask={handleCreateTask}
+                    />
+                </>
+                
+            )}
+
         </section>
     );
 }
