@@ -60,7 +60,7 @@ export default function GoalCard({
     setTaskTitles,
 }: GoalCardProps){
     const [isEditing, setIsEditing] = useState(false);
-    const [editiedTitle, setEditedTitle] = useState(goal.title);
+    const [editedTitle, setEditedTitle] = useState(goal.title);
     const [editedDescription, setEditedDescription] = useState(goal.description ?? "");
     return(
         <section className="relative rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
@@ -72,8 +72,41 @@ export default function GoalCard({
                 onDelete={handleDeleteGoal}
                 onEdit={() => setIsEditing(true)}
             />
-            {isEditing ? (
-                <p className="text-sm text-teal-700">Editing mode is on</p>
+            {/* the state of the goalCard depends on if its editing or not */}
+            {isEditing ? (   
+                <div className="space-y-3">
+                    <p className="text-sm text-teal-700">Editing mode is on</p>
+                    <input
+                        value={editedTitle}
+                        onChange={(e)=> setEditedTitle(e.target.value)}
+                        className="w-full rounded-md border border-slate-300 px-3 py-2 text-lg font-semibold"
+                        placeholder="Goal title"
+                    />
+                    <textarea
+                        value={editedDescription}
+                        onChange={(e) => setEditedDescription(e.target.value)}
+                        className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+                        placeholder="Goal Title"
+                    />
+                    <div className="flex gap-2">
+                        <button
+                            onClick={()=> setIsEditing(false)}
+                            className="rounded-md bg-teal-200 px-3 py-1 text-sm font-medium text-teal-900 hover:bg-teal-300"
+                        >
+                            Save
+                        </button>
+                        <button
+                            onClick={()=> {
+                                setEditedTitle(goal.title);
+                                setEditedDescription(goal.description ?? "")
+                                setIsEditing(false);
+                            }}
+                            className="rounded-md bg-slate-200 px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-300"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
             ) : (
                 <>
                     <p className="text-sm text-slate-500">Normal mode</p>
