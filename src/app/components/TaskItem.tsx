@@ -27,8 +27,13 @@ export default function TaskItem({
         <>
         <li> 
             <button 
-                className="mb-2 rounded bg-white px-4 py-2 font-medium text-black hover:bg-teal-200" 
-                onClick={()=> handleToggleTask(task.id)}>
+                className={`mb-2 rounded px-4 py-2 font-medium text-black hover:bg-teal-200 transition ${
+                    task.completed
+                        ? "bg-teal-200"
+                        : "bg-white hover:bg-teal-200"
+                }`}
+                onClick={()=> handleToggleTask(task.id)}
+            >
                 {task.completed ? "☑︎" : "☐"}
             </button>
             &nbsp;&nbsp;{task.title}&nbsp;&nbsp;
