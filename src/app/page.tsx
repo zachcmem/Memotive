@@ -12,6 +12,8 @@ import{
   deleteTask,
 } from "@/lib/api";
 
+import { calculateProgress } from "@/lib/progress";
+
 // Tells TypeScript about the SHAPE OF DATA
 //    Later when we map the goals to the dash, type knows what goals contain
 // Task should have an id, title, and boolean
@@ -124,20 +126,24 @@ export default function Home() {
     }
   }
 
-  async function handleToggleTask(taskId: string){
-
-    try{
+  async function handleToggleTask(taskId: string) {
+    try {
       const updatedTask = await toggleTask(taskId);
-      setGoals((currentGoals) => 
-        currentGoals.map((goal) => ({
-          ...goal,
-          tasks: goal.tasks.map((task)=>
+
+      setGoals((currentGoals) =>
+        currentGoals.map((goal) => {
+          const updatedTasks = (goal.tasks ?? []).map((task) =>
             task.id === taskId ? updatedTask : task
-          ),
-        }))
+          );
+
+          return {
+            ...goal,
+            tasks: updatedTasks,
+            progress: calculateProgress(updatedTasks),
+          };
+        })
       );
-    }
-    catch(error){
+    } catch (error) {
       console.error("Failed to toggle task: ", error);
     }
   }
