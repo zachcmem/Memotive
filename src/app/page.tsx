@@ -204,17 +204,22 @@ export default function Home() {
     updatedTitle: string,
     updatedDescription: string,
   ){
-    setGoals((currentGoals) => 
-    currentGoals.map((goal)=> 
-      goal.id === goalId
-      ? {
-        ...goal,
+    try{
+      const updatedGoal = await updateGoal(goalId, {
         title: updatedTitle,
-        description: updatedDescription,
-      }
-      : goal
-    ));
+        description: updatedDescription
+      });
+
+      setGoals((currentGoals) => 
+        currentGoals.map((goal)=>
+          goal.id === goalId ? updatedGoal : goal
+        )
+      );
   }
+  catch(error){
+    console.error("Failed to update goal: ", error)
+  }
+}
 
   //three dot menu open / close state
   //    null = no menu open
