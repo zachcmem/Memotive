@@ -71,6 +71,9 @@ export default function GoalCard({
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(goal.title);
     const [editedDescription, setEditedDescription] = useState(goal.description ?? "");
+    // null is no task being edited, some task ID means this specific task is edited
+    //  one simple boolean wont help because a goal can have many tasks
+    const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 
     // handles the save editing button
     //     classes the update goal function
@@ -142,6 +145,8 @@ export default function GoalCard({
                         tasks={goal.tasks ?? []} 
                         handleToggleTask={handleToggleTask}
                         handleDeleteTask={handleDeleteTask}
+                        editingTaskId={editingTaskId}
+                        setEditingTaskId={setEditingTaskId}
                     />
                     
                     <AddTaskForm

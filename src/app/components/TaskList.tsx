@@ -16,16 +16,21 @@ type Task = {
 type TaskListProps = {
     // must pass in the list of tasks per goal
     // doesnt need anything else, other than tasks
-    tasks: Task[],
+    tasks: Task[];
     //function type declarations
+    editingTaskId: string | null;
+    setEditingTaskId: React.Dispatch<React.SetStateAction<string | null>>;
     handleToggleTask: (taskId: string) => void;
     handleDeleteTask: (taskId: string) => void;
+    
 }
 
 
 export default function TaskList({
     //insert the props here
     tasks,
+    editingTaskId,
+    setEditingTaskId,
     handleToggleTask,
     handleDeleteTask,
 }: TaskListProps){
@@ -39,8 +44,11 @@ export default function TaskList({
                         // must have a key inside a map
                         key={task.id}
                         task={task}
+                        isEditing={editingTaskId === task.id}
+                        onEdit={()=> setEditingTaskId(task.id)}
                         handleToggleTask={handleToggleTask}
                         handleDeleteTask={handleDeleteTask}
+                       
                     />
                 ))}
             </ul>
