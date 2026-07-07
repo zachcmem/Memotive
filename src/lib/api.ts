@@ -94,3 +94,23 @@ export async function updateGoal(
     return response.json();
 }
 
+
+export async function updateTask(
+    taskId: string,
+    data: {
+        title: string;
+    }
+){
+    const response = await fetch(`/api/tasks/${taskId}`,{
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (!response.ok){
+        throw new Error("Failed to update task")
+    }
+    return response.json()
+}
