@@ -221,6 +221,22 @@ export default function Home() {
   }
 }
 
+async function handleUpdateTask(taskId: string, updatedTitle: string){
+  setGoals((currentGoals) =>
+    currentGoals.map((goal)=> ({
+      ...goal,
+      tasks: goal.tasks.map((task) =>
+        task.id === taskId
+        ? {
+          ...task,
+          title: updatedTitle,
+        }
+        : task
+      ),
+    }))
+  );
+}
+
   //three dot menu open / close state
   //    null = no menu open
   //    goal.id = this goal's menu is open
@@ -266,6 +282,7 @@ export default function Home() {
           handleUpdateGoal={handleUpdateGoal}
           taskTitles={taskTitles}
           setTaskTitles={setTaskTitles}
+          handleUpdateTask={handleUpdateTask}
         />
       ))}
     </div>

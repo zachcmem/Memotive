@@ -21,6 +21,10 @@ type TaskItemProps = {
     isEditing: boolean;
     onEdit: () => void;
     onCancelEdit: () => void;
+    handleUpdateTask: (
+        taskId: string, 
+        updatedTitle: string
+    ) => void;
 }
 
 export default function TaskItem({
@@ -31,6 +35,7 @@ export default function TaskItem({
     onCancelEdit,
     handleToggleTask,
     handleDeleteTask,
+    handleUpdateTask,
 }: TaskItemProps){
 
     // temporary input state inside TaskItem
@@ -50,7 +55,7 @@ export default function TaskItem({
                     <button
                         type="button"
                         onClick={()=> {
-                            console.log("Saving task title");
+                            handleUpdateTask(task.id, editedTaskTitle);
                             onCancelEdit();
                         }}
                         className="rounded bg-teal-200 px-2 py-1 text-sm font-medium text-black hover bg-teal-300"

@@ -49,6 +49,10 @@ type GoalCardProps = {
     ) => void;
     taskTitles: Record<string,string>;
     setTaskTitles: React.Dispatch<React.SetStateAction<Record<string,string>>>;
+    handleUpdateTask: (
+        taskId: string, 
+        updatedTitle: string
+    ) => void;
 };
 
 
@@ -65,6 +69,7 @@ export default function GoalCard({
     handleUpdateGoal,
     taskTitles,
     setTaskTitles,
+    handleUpdateTask,
 }: GoalCardProps){
 
     //useStates for editing
@@ -82,7 +87,6 @@ export default function GoalCard({
         handleUpdateGoal(goal.id, editedTitle, editedDescription);
         setIsEditing(false);
     }
-
     return(
         <section className="relative rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
             
@@ -147,6 +151,7 @@ export default function GoalCard({
                         handleDeleteTask={handleDeleteTask}
                         editingTaskId={editingTaskId}
                         setEditingTaskId={setEditingTaskId}
+                        handleUpdateTask={handleUpdateTask}
                     />
                     
                     <AddTaskForm

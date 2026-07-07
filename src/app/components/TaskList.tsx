@@ -22,6 +22,10 @@ type TaskListProps = {
     setEditingTaskId: React.Dispatch<React.SetStateAction<string | null>>;
     handleToggleTask: (taskId: string) => void;
     handleDeleteTask: (taskId: string) => void;
+    handleUpdateTask: (
+        taskId: string, 
+        updatedTitle: string
+    ) => void
     
 }
 
@@ -33,7 +37,9 @@ export default function TaskList({
     setEditingTaskId,
     handleToggleTask,
     handleDeleteTask,
+    handleUpdateTask,
 }: TaskListProps){
+
     return(
         <>
             <h3 className="mb-2 text-1xl font-bold">Tasks:</h3>
@@ -49,6 +55,7 @@ export default function TaskList({
                         onCancelEdit={()=>setEditingTaskId(null)}
                         handleToggleTask={handleToggleTask}
                         handleDeleteTask={handleDeleteTask}
+                        handleUpdateTask={handleUpdateTask}
                        
                     />
                 ))}
