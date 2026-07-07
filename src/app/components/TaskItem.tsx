@@ -24,7 +24,7 @@ type TaskItemProps = {
     handleUpdateTask: (
         taskId: string, 
         updatedTitle: string
-    ) => void;
+    ) => Promise<void>;
 }
 
 export default function TaskItem({
@@ -54,8 +54,8 @@ export default function TaskItem({
                 
                     <button
                         type="button"
-                        onClick={()=> {
-                            handleUpdateTask(task.id, editedTaskTitle);
+                        onClick={async ()=> {
+                            await handleUpdateTask(task.id, editedTaskTitle);
                             onCancelEdit();
                         }}
                         className="rounded bg-teal-200 px-2 py-1 text-sm font-medium text-black hover bg-teal-300"

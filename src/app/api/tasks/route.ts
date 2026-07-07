@@ -19,7 +19,7 @@
 // in Memotive. It belongs under a goal
 
 // step 1: calculate the imports
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request){
@@ -59,5 +59,31 @@ export async function POST(request: Request){
             {error: "Failed to create task"},
             {status: 500}
         )
+    }
+}
+
+export async function PATCH(
+    request: NextRequest,
+    {params}: {params: Promise<{id: string}>}
+){
+    try{
+        const {id} = await params;
+        const body = await request.json();
+        const updatedTask = await prisma.task.update({
+            where: {
+                id,
+            },
+            data: {
+                title: body.title,
+            },
+        });
+        return NextResponse.json(updatedTask)
+    }
+    catch(error){
+        console.error("Failed to update task:", error);
+        return NextResponse.json(
+            {error: "Failed to update task"},
+            {status: 500}
+        );
     }
 }

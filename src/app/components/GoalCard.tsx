@@ -52,7 +52,7 @@ type GoalCardProps = {
     handleUpdateTask: (
         taskId: string, 
         updatedTitle: string
-    ) => void;
+    ) => Promise<void>;
 };
 
 

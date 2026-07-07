@@ -25,7 +25,7 @@ type TaskListProps = {
     handleUpdateTask: (
         taskId: string, 
         updatedTitle: string
-    ) => void
+    ) => Promise<void>
     
 }
 

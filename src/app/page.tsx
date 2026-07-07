@@ -11,6 +11,7 @@ import{
   toggleTask,
   deleteTask,
   updateGoal,
+  updateTask,
 } from "@/lib/api";
 
 import { calculateProgress } from "@/lib/progress";
@@ -222,19 +223,25 @@ export default function Home() {
 }
 
 async function handleUpdateTask(taskId: string, updatedTitle: string){
-  setGoals((currentGoals) =>
-    currentGoals.map((goal)=> ({
-      ...goal,
-      tasks: goal.tasks.map((task) =>
-        task.id === taskId
-        ? {
-          ...task,
-          title: updatedTitle,
-        }
-        : task
-      ),
-    }))
-  );
+  
+  try{
+    const updatedTask = await updateTask(taskId, {
+      title: updatedTitle,
+    });
+
+    setGoals((currentGoals) =>
+      currentGoals.map((goal)=> ({
+        ...goal,
+        tasks: goal.tasks.map((task) =>
+          task.id === taskId ? updatedTask : task
+        ),
+      }))
+    );
+  }
+  catch(error){
+    console.error("Failed to update task: ", error)
+  }
+  
 }
 
   //three dot menu open / close state
