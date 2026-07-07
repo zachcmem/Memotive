@@ -46,6 +46,7 @@ export default function TaskList({
                         task={task}
                         isEditing={editingTaskId === task.id}
                         onEdit={()=> setEditingTaskId(task.id)}
+                        onCancelEdit={()=>setEditingTaskId(null)}
                         handleToggleTask={handleToggleTask}
                         handleDeleteTask={handleDeleteTask}
                        

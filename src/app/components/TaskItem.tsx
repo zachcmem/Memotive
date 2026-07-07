@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 type Task = {
     id: string,
     title: string,
@@ -18,19 +20,56 @@ type TaskItemProps = {
     handleDeleteTask: (taskId: string) => void;
     isEditing: boolean;
     onEdit: () => void;
+    onCancelEdit: () => void;
 }
 
 export default function TaskItem({
+    //prop destructuring
     task,
     isEditing,
     onEdit,
+    onCancelEdit,
     handleToggleTask,
     handleDeleteTask,
 }: TaskItemProps){
+
+    // temporary input state inside TaskItem
+    const [editedTaskTitle, setEditedTaskTitle] = useState(task.title);
+
     return(
         <li>
             {isEditing ? (
-                <p className="text-sm text-teal-700">Editing this task</p>
+                <>
+                    <input
+                    value={editedTaskTitle}
+                    onChange={(e)=> setEditedTaskTitle(e.target.value)}
+                    className="mb-2 rounded border border-teal-200 px-3 py-2 text-sm"
+                    placeholder="Task title"
+                    />
+                
+                    <button
+                        type="button"
+                        onClick={()=> {
+                            console.log("Saving task title");
+                            onCancelEdit();
+                        }}
+                        className="rounded bg-teal-200 px-2 py-1 text-sm font-medium text-black hover bg-teal-300"
+                    >
+                        Save
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={()=> {
+                            setEditedTaskTitle(task.title);
+                            onCancelEdit();
+                        }}
+                        className="rounded bg-white px-2 py-1 text-sm font-medium text-black hover bg-teal-300"
+                    >
+                        Cancel
+                    </button>
+                </>
+                
             ):(
                 <>
                 <button 
@@ -46,16 +85,17 @@ export default function TaskItem({
                 &nbsp;&nbsp;{task.title}&nbsp;&nbsp;
                 <button
                     type="button"
-                    onClick={()=> handleDeleteTask(task.id)}
-                    className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200" >
-                    Delete
-                </button>
-                <button
-                    type="button"
                     onClick={onEdit}
                     className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200"
                 >
                     Edit
+                </button>
+                &nbsp;&nbsp;
+                <button
+                    type="button"
+                    onClick={()=> handleDeleteTask(task.id)}
+                    className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200" >
+                    Delete
                 </button>
             </>
             )}
