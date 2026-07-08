@@ -19,7 +19,7 @@
 //     3. Flip completed from true to false, or false to true.
 //     4. Return the updated task.
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 type RouteParams = {
@@ -28,44 +28,6 @@ type RouteParams = {
     }>
 }
 
-export async function PATCH(request: Request, {params}: RouteParams){
-    try{
-        const { id } = await params;
-
-        const existingTask = await prisma.task.findUnique({
-            where: {
-                id,
-            }
-        });
-
-        if(!existingTask){
-            return NextResponse.json(
-                {error: "Task not found"},
-                {status: 404}
-            );
-        }
-
-        // the updated task with completed
-        const updatedTask = await prisma.task.update({
-            where: {
-                id,
-            },
-            data: {
-                completed: !existingTask.completed
-            }
-        });
-
-        return NextResponse.json(updatedTask);
-
-    }
-    catch (error){
-        console.error("Failed to update task:", error);
-        return NextResponse.json(
-            { error: "Failed to update task" },
-            { status: 500}
-        );
-    }
-}
 
 export async function DELETE( request: Request, {params}: RouteParams){
     try{
@@ -101,6 +63,38 @@ export async function DELETE( request: Request, {params}: RouteParams){
         return NextResponse.json(
         { error: "Failed to delete task" },
         { status: 500 }
+        );
+    }
+}
+
+// this function combines PATCHES for both the Toggling Tasks
+//  as completed and updating task titles
+export async function PATCH(
+    request: NextRequest,
+    {params}: {params: Promise<{id: string}>}
+){
+    try{
+        const {id} = await params;
+        const body = await request.json();
+        const updatedTask = await prisma.task.update({
+            where: {
+                id,
+            },
+            //this part means that if body.title existed, update the title,
+            //  and if body completed exists, update completed.
+            //  but if one is missing, leave alone
+            data: {
+                ...(body.title !== undefined && {title: body.title}),
+                ...(body.completed !== undefined && {completed: body.completed}),
+            },
+        });
+        return NextResponse.json(updatedTask)
+    }
+    catch(error){
+        console.error("Failed to update task:", error);
+        return NextResponse.json(
+            {error: "Failed to update task"},
+            {status: 500}
         );
     }
 }

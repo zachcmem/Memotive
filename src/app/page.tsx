@@ -223,7 +223,7 @@ export default function Home() {
 }
 
 async function handleUpdateTask(taskId: string, updatedTitle: string){
-  
+  console.log("handleUpdateTask called: ", taskId, updatedTitle)
   try{
     const updatedTask = await updateTask(taskId, {
       title: updatedTitle,
