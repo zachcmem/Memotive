@@ -50,9 +50,19 @@ export async function createTask(goalId: string, title: string){
     return response.json();
 }
 
-export async function toggleTask( taskId: string){
+//calls PATCH function but only update completed
+export async function toggleTask( 
+    taskId: string,
+    completed: boolean,
+){
     const response = await fetch(`api/tasks/${taskId}`,{
         method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            completed,
+        }),
     });
 
     if (!response.ok){
@@ -94,7 +104,7 @@ export async function updateGoal(
     return response.json();
 }
 
-
+// sends to the patch function, but only can update task title
 export async function updateTask(
     taskId: string,
     data: {

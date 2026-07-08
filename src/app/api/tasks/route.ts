@@ -62,28 +62,3 @@ export async function POST(request: Request){
     }
 }
 
-export async function PATCH(
-    request: NextRequest,
-    {params}: {params: Promise<{id: string}>}
-){
-    try{
-        const {id} = await params;
-        const body = await request.json();
-        const updatedTask = await prisma.task.update({
-            where: {
-                id,
-            },
-            data: {
-                title: body.title,
-            },
-        });
-        return NextResponse.json(updatedTask)
-    }
-    catch(error){
-        console.error("Failed to update task:", error);
-        return NextResponse.json(
-            {error: "Failed to update task"},
-            {status: 500}
-        );
-    }
-}
