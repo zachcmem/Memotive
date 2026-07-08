@@ -90,8 +90,13 @@ export default function GoalCard({
     }
     console.log("GoalCard isEditing:", isEditing);
     return(
-        
-        <section className="relative rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
+        <section
+            className={`relative rounded-lg border p-6 shadow transition ${
+                isEditing
+                ? "bg-neutral-850 border-teal-300 ring-2 ring-teal-200"
+                : "bg-neutral-900 border-teal-200"
+            }`}
+        >
             
             <ThreeDotMenu
                 itemId={goal.id}
@@ -100,11 +105,11 @@ export default function GoalCard({
                 onDelete={handleDeleteGoal}
                 onEdit={() => setIsEditing(true)}
             />
-
+            
             {/* the state of the goalCard depends on if its editing or not */}
             {isEditing ? (   
-                <div className="space-y-3">
-                    <p className="text-sm text-teal-700">Editing mode is on</p>
+                <div className="mb-3 space-y-3">
+                    <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-teal-300"> Editing Goal</p>
                     <input
                         value={editedTitle}
                         onChange={(e)=> setEditedTitle(e.target.value)}
