@@ -25,7 +25,8 @@ type TaskListProps = {
     handleUpdateTask: (
         taskId: string, 
         updatedTitle: string
-    ) => Promise<void>
+    ) => Promise<void>;
+    isGoalEditing: boolean;
     
 }
 
@@ -38,8 +39,9 @@ export default function TaskList({
     handleToggleTask,
     handleDeleteTask,
     handleUpdateTask,
+    isGoalEditing,
 }: TaskListProps){
-
+    console.log("TaskList isGoalEditing:", isGoalEditing);
     return(
         <>
             <h3 className="mb-2 text-1xl font-bold">Tasks:</h3>
@@ -50,7 +52,8 @@ export default function TaskList({
                         // must have a key inside a map
                         key={task.id}
                         task={task}
-                        isEditing={editingTaskId === task.id}
+                        isTaskEditing={editingTaskId === task.id}
+                        isGoalEditing={isGoalEditing}
                         onEdit={()=> setEditingTaskId(task.id)}
                         onCancelEdit={()=>setEditingTaskId(null)}
                         handleToggleTask={handleToggleTask}

@@ -85,9 +85,12 @@ export default function GoalCard({
     //     sets editing state to false
     function handleSaveEdit(){
         handleUpdateGoal(goal.id, editedTitle, editedDescription);
+        setEditingTaskId(null);
         setIsEditing(false);
     }
+    console.log("GoalCard isEditing:", isEditing);
     return(
+        
         <section className="relative rounded-lg bg-neutral-900 border border-teal-200 p-6 shadow">
             
             <ThreeDotMenu
@@ -141,28 +144,32 @@ export default function GoalCard({
 
                     <p className="mb-4 font-bold">{goal.description}</p>
 
-                    <ProgressBar
-                        progress={goal.progress}
-                    />
+                </>
+                
+            )}
 
-                    <TaskList
-                        tasks={goal.tasks ?? []} 
-                        handleToggleTask={handleToggleTask}
-                        handleDeleteTask={handleDeleteTask}
-                        editingTaskId={editingTaskId}
-                        setEditingTaskId={setEditingTaskId}
-                        handleUpdateTask={handleUpdateTask}
-                    />
-                    
-                    <AddTaskForm
+            <ProgressBar
+                progress={goal.progress}
+            />
+
+            <TaskList
+                tasks={goal.tasks ?? []} 
+                handleToggleTask={handleToggleTask}
+                handleDeleteTask={handleDeleteTask}
+                editingTaskId={editingTaskId}
+                setEditingTaskId={setEditingTaskId}
+                handleUpdateTask={handleUpdateTask}
+                isGoalEditing={isEditing} //USE STATE FOR EDITING MODE
+            />
+
+            <AddTaskForm
                         goalId = {goal.id}
                         taskTitles = {taskTitles}
                         setTaskTitles = {setTaskTitles}
                         handleCreateTask={handleCreateTask}
-                    />
-                </>
-                
-            )}
+            />
+
+
 
         </section>
     );

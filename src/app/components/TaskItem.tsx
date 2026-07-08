@@ -18,7 +18,8 @@ type TaskItemProps = {
     //function type declarations
     handleToggleTask: (taskId: string) => void;
     handleDeleteTask: (taskId: string) => void;
-    isEditing: boolean;
+    isTaskEditing: boolean;
+    isGoalEditing: boolean;
     onEdit: () => void;
     onCancelEdit: () => void;
     handleUpdateTask: (
@@ -30,20 +31,22 @@ type TaskItemProps = {
 export default function TaskItem({
     //prop destructuring
     task,
-    isEditing,
+    isTaskEditing,
     onEdit,
     onCancelEdit,
     handleToggleTask,
     handleDeleteTask,
     handleUpdateTask,
+    isGoalEditing,
 }: TaskItemProps){
 
     // temporary input state inside TaskItem
     const [editedTaskTitle, setEditedTaskTitle] = useState(task.title);
-
+    console.log("TaskItem isGoalEditing:", isGoalEditing);
     return(
         <li>
-            {isEditing ? (
+           
+            {isTaskEditing ? (
                 <>
                     <input
                     value={editedTaskTitle}
@@ -88,22 +91,28 @@ export default function TaskItem({
                     {task.completed ? "☑︎" : "☐"}
                 </button>
                 &nbsp;&nbsp;{task.title}&nbsp;&nbsp;
-                <button
-                    type="button"
-                    onClick={onEdit}
-                    className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200"
-                >
-                    Edit
-                </button>
-                &nbsp;&nbsp;
-                <button
-                    type="button"
-                    onClick={()=> handleDeleteTask(task.id)}
-                    className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200" >
-                    Delete
-                </button>
+                
+                {isGoalEditing && (
+                    <>
+                        <button
+                        type="button"
+                        onClick={onEdit}
+                        className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200"
+                        >
+                            Edit
+                        </button>
+                        &nbsp;&nbsp;
+                        <button
+                            type="button"
+                            onClick={()=> handleDeleteTask(task.id)}
+                            className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200" >
+                            Delete
+                        </button>
+                    </>
+                )}
             </>
             )}
         </li>
     );
+    
 }
