@@ -117,28 +117,9 @@ export default function GoalCard({
                         className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
                         placeholder="Goal Title"
                     />
-                    <div className="flex gap-2">
-                        <button
-                            onClick={handleSaveEdit}
-                            className="rounded-md bg-teal-200 px-3 py-1 text-sm font-medium text-teal-900 hover:bg-teal-300"
-                        >
-                            Save
-                        </button>
-                        <button
-                            onClick={()=> {
-                                setEditedTitle(goal.title);
-                                setEditedDescription(goal.description ?? "")
-                                setIsEditing(false);
-                            }}
-                            className="rounded-md bg-slate-200 px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-300"
-                        >
-                            Cancel
-                        </button>
-                    </div>
                 </div>
             ) : (
                 <>
-                    <p className="text-sm text-slate-500">Normal mode</p>
 
                     <h2 className="text-2xl font-bold">{goal.title}</h2>
 
@@ -169,8 +150,26 @@ export default function GoalCard({
                         handleCreateTask={handleCreateTask}
             />
 
-
-
+            {isEditing && (
+                <div className="mt-4 flex gap-2">
+                    <button
+                        onClick={handleSaveEdit}
+                        className="rounded-md bg-teal-200 px-3 py-1 text-sm font-medium text-teal-900 hover:bg-teal-300"
+                    >
+                        Save
+                    </button>
+                    <button
+                        onClick={()=> {
+                            setEditedTitle(goal.title);
+                            setEditedDescription(goal.description ?? "")
+                            setIsEditing(false);
+                        }}
+                        className="rounded-md bg-slate-200 px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-300"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            )}
         </section>
     );
 }

@@ -20,7 +20,7 @@ export default function AddTaskForm({
     return(
         <form onSubmit={(event)=> handleCreateTask(event, goalId)}>
             <input
-                className="rounded border border-black bg-teal-200 px-3 py-2 text-black placeholder:text-black"
+                className="mt-2 rounded border border-black bg-teal-200 px-3 py-2 text-black placeholder:text-black"
                 value= {taskTitles[goalId] || ""}
                 onChange={(event)=> 
                 setTaskTitles((currentTaskTitles) => ({
