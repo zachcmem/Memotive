@@ -144,10 +144,10 @@ export default function GoalCard({
             />
 
             <AddTaskForm
-                        goalId = {goal.id}
-                        taskTitles = {taskTitles}
-                        setTaskTitles = {setTaskTitles}
-                        handleCreateTask={handleCreateTask}
+                goalId = {goal.id}
+                taskTitles = {taskTitles}
+                setTaskTitles = {setTaskTitles}
+                handleCreateTask={handleCreateTask}
             />
 
             {isEditing && (

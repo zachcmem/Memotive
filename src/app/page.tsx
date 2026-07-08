@@ -133,25 +133,37 @@ export default function Home() {
 
   async function handleToggleTask(taskId: string) {
     try {
+      const currentGoal = goals.find((goal) =>
+        goal.tasks.some((task) => task.id === taskId)
+      );
 
-      const currentTask = goals
-        .flatMap((goal)=> goal.tasks)
-        .find((task)=> task.id === taskId);
+      if (!currentGoal) return;
+
+      const currentTask = currentGoal.tasks.find((task) => task.id === taskId);
 
       if (!currentTask) return;
 
       const updatedTask = await toggleTask(taskId, !currentTask.completed);
 
       setGoals((currentGoals) =>
-        currentGoals.map((goal) => ({
-          ...goal,
-          tasks: goal.tasks.map((task) => 
+        currentGoals.map((goal) => {
+          if (goal.id !== currentGoal.id) {
+            return goal;
+          }
+
+          const updatedTasks = goal.tasks.map((task) =>
             task.id === taskId ? updatedTask : task
-          ),
-        }))
+          );
+
+          return {
+            ...goal,
+            tasks: updatedTasks,
+            progress: calculateProgress(updatedTasks),
+          };
+        })
       );
     } catch (error) {
-      console.error("Failed to toggle task: ", error);
+      console.error("Failed to toggle task:", error);
     }
   }
 

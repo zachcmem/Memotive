@@ -54,7 +54,7 @@ export default function TaskItem({
                     className="mb-2 rounded border border-teal-200 px-3 py-2 text-sm"
                     placeholder="Task title"
                     />
-                
+                    &nbsp;&nbsp;
                     <button
                         type="button"
                         onClick={async ()=> {
@@ -65,7 +65,7 @@ export default function TaskItem({
                     >
                         Save
                     </button>
-
+                    &nbsp;&nbsp;
                     <button
                         type="button"
                         onClick={()=> {
