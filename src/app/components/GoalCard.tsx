@@ -130,13 +130,14 @@ export default function GoalCard({
 
                     <p className="mb-4 font-bold">{goal.description}</p>
 
+                    <ProgressBar
+                        progress={goal.progress}
+                    />
                 </>
                 
             )}
 
-            <ProgressBar
-                progress={goal.progress}
-            />
+            
 
             <TaskList
                 tasks={goal.tasks ?? []} 

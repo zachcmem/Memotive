@@ -42,6 +42,16 @@ export default function TaskList({
     isGoalEditing,
 }: TaskListProps){
     console.log("TaskList isGoalEditing:", isGoalEditing);
+    
+    // no tasks in goal state
+    if(tasks.length === 0){
+        return(
+            <p className="my-3 rounded-md border border-dashed border-teal-200 px-3 py-2 text-sm text-slate-400">
+                No tasks yet- add your first task to start making progress
+            </p>
+        );
+    }
+    
     return(
         <>
             <h3 className="mb-2 text-1xl font-bold">Tasks:</h3>
