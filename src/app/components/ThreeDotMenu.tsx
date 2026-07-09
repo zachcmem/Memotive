@@ -46,7 +46,15 @@ export default function ThreeDotMenu({
 
                 <button
                 type="button"
-                onClick={() =>onDelete(itemId)}
+                onClick={() => {
+                    const confirmed = window.confirm(
+                        "Are you sure you want to delete this goal? This will delete all of its tasks"
+                    );
+                    if (!confirmed) return;
+
+                    onDelete(itemId)
+                    setOpenMenuId(null);
+                }}
                 className="block w-full rounded px-3 py-2 text-left text-sm text-black bg-white hover:bg-teal-200"
                 >
                     Delete
