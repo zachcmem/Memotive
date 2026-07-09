@@ -104,7 +104,16 @@ export default function TaskItem({
                         &nbsp;&nbsp;
                         <button
                             type="button"
-                            onClick={()=> handleDeleteTask(task.id)}
+                            onClick={()=> {
+
+                                const confirmed = window.confirm(
+                                    "Are you sure you want to delete this task?"
+                                );
+
+                                if(!confirmed) return;
+                                
+                                handleDeleteTask(task.id)
+                            }}
                             className="mb-2 rounded bg-white px-1 py-1 font-medium text-black hover:bg-teal-200" >
                             Delete
                         </button>
