@@ -16,6 +16,19 @@ import{
 
 import { calculateProgress } from "@/lib/progress";
 
+//imports the drag-and-drop features
+import {
+  DndContext,
+  closestCenter
+} from "@dnd-kit/core";
+
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+
+
+
 // Tells TypeScript about the SHAPE OF DATA
 //    Later when we map the goals to the dash, type knows what goals contain
 // Task should have an id, title, and boolean
@@ -263,6 +276,8 @@ async function handleUpdateTask(taskId: string, updatedTitle: string){
   //    goal.id = this goal's menu is open
   const [openGoalMenuId, setOpenGoalMenuId] = useState<string | null>(null);
 
+  
+
   if(loading){
     return<main>Loading Goals...</main>
   }
@@ -287,25 +302,34 @@ async function handleUpdateTask(taskId: string, updatedTitle: string){
     />
     
     <div className=" space-y-6">
-      {/* list all the goals (GoalCard component) */}
-      {goals.map((goal) => (
-        <GoalCard
-          // this is all passed to GoalCard.tsx, including 
-          // functions defined here in page.tsx
-          key={goal.id}
-          goal={goal}
-          openGoalMenuId={openGoalMenuId}
-          setOpenGoalMenuId={setOpenGoalMenuId}
-          handleDeleteGoal={handleDeleteGoal}
-          handleToggleTask={handleToggleTask}
-          handleCreateTask={handleCreateTask}
-          handleDeleteTask={handleDeleteTask}
-          handleUpdateGoal={handleUpdateGoal}
-          taskTitles={taskTitles}
-          setTaskTitles={setTaskTitles}
-          handleUpdateTask={handleUpdateTask}
-        />
-      ))}
+      {/* drag and drop wrapper */}
+      <DndContext collisionDetection={closestCenter}>
+        <SortableContext
+          // tells dnd-kit that they are sorted on the goal array
+          items={goals.map((goal)=> goal.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {/* list all the goals (GoalCard component) */}
+          {goals.map((goal) => (
+            <GoalCard
+              // this is all passed to GoalCard.tsx, including 
+              // functions defined here in page.tsx
+              key={goal.id}
+              goal={goal}
+              openGoalMenuId={openGoalMenuId}
+              setOpenGoalMenuId={setOpenGoalMenuId}
+              handleDeleteGoal={handleDeleteGoal}
+              handleToggleTask={handleToggleTask}
+              handleCreateTask={handleCreateTask}
+              handleDeleteTask={handleDeleteTask}
+              handleUpdateGoal={handleUpdateGoal}
+              taskTitles={taskTitles}
+              setTaskTitles={setTaskTitles}
+              handleUpdateTask={handleUpdateTask}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
     </div>
   </main>
 );

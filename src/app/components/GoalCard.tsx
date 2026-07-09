@@ -13,6 +13,9 @@ import ThreeDotMenu from "./ThreeDotMenu";
 import AddTaskForm from "./AddTaskForm";
 import { useState } from "react";
 
+import { useSortable} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
 //type delcaration, including props 
 type Task = {
   id: string
@@ -89,10 +92,36 @@ export default function GoalCard({
         setEditingTaskId(null);
         setIsEditing(false);
     }
-    console.log("GoalCard isEditing:", isEditing);
+
+    //for drag and drop
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({
+        id: goal.id,
+    });
+    
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
     return(
         <section
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+
             className={`relative rounded-lg border p-6 shadow transition ${
+                isDragging
+                    ? "opacity-50"
+                    : ""
+            }${
                 isEditing
                 ? "bg-neutral-850 border-teal-300 ring-2 ring-teal-200"
                 : "bg-neutral-900 border-teal-200"
