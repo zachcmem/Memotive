@@ -80,6 +80,7 @@ export default function GoalCard({
     //  one simple boolean wont help because a goal can have many tasks
     const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 
+    const [isCollapsed, setIsCollapsed] = useState(false);
     // handles the save editing button
     //     classes the update goal function
     //     sets editing state to false
@@ -98,12 +99,24 @@ export default function GoalCard({
             }`}
         >
             
+            <button
+                type="button"
+                onClick={()=> setIsCollapsed((current)=> !current)}
+                className="text-sm text-teal-300 hover:text-teal-200"
+            >
+                {isCollapsed ? "Show tasks" : "Hide tasks"}
+            </button>
+
+
             <ThreeDotMenu
                 itemId={goal.id}
                 openMenuId={openGoalMenuId}
                 setOpenMenuId={setOpenGoalMenuId}
                 onDelete={handleDeleteGoal}
-                onEdit={() => setIsEditing(true)}
+                onEdit={() => {
+                    setIsEditing(true)
+                    setIsCollapsed(false)
+                }}
             />
             
             {/* the state of the goalCard depends on if its editing or not */}
@@ -138,24 +151,28 @@ export default function GoalCard({
             )}
 
             
+            {!isCollapsed &&(
+                <>
+                
+                    <TaskList
+                        tasks={goal.tasks ?? []} 
+                        handleToggleTask={handleToggleTask}
+                        handleDeleteTask={handleDeleteTask}
+                        editingTaskId={editingTaskId}
+                        setEditingTaskId={setEditingTaskId}
+                        handleUpdateTask={handleUpdateTask}
+                        isGoalEditing={isEditing} //USE STATE FOR EDITING MODE
+                    />
 
-            <TaskList
-                tasks={goal.tasks ?? []} 
-                handleToggleTask={handleToggleTask}
-                handleDeleteTask={handleDeleteTask}
-                editingTaskId={editingTaskId}
-                setEditingTaskId={setEditingTaskId}
-                handleUpdateTask={handleUpdateTask}
-                isGoalEditing={isEditing} //USE STATE FOR EDITING MODE
-            />
-
-            <AddTaskForm
-                goalId = {goal.id}
-                taskTitles = {taskTitles}
-                setTaskTitles = {setTaskTitles}
-                handleCreateTask={handleCreateTask}
-            />
-
+                    <AddTaskForm
+                        goalId = {goal.id}
+                        taskTitles = {taskTitles}
+                        setTaskTitles = {setTaskTitles}
+                        handleCreateTask={handleCreateTask}
+                    />
+                </>
+            )}
+            
             {isEditing && (
                 <div className="mt-4 flex gap-2">
                     <button
