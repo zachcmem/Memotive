@@ -273,7 +273,7 @@ export default function Home() {
     
   }
 
-  function handleDragEnd(event: DragEndEvent){
+  async function handleDragEnd(event: DragEndEvent){
     const {active, over} = event;
     if(!over) {
       return;
@@ -281,6 +281,8 @@ export default function Home() {
     if(active.id === over.id){
       return;
     }
+
+    let reorderedGoals: typeof goals = [];
 
     setGoals((currentGoals)=>{
       const oldIndex = currentGoals.findIndex(
@@ -292,11 +294,33 @@ export default function Home() {
       );
 
       if (oldIndex === 1 || newIndex === -1){
+        reorderedGoals = currentGoals;
         return currentGoals;
       }
 
-      return arrayMove(currentGoals, oldIndex, newIndex);
+      reorderedGoals = arrayMove(currentGoals, oldIndex, newIndex);
+
+      return reorderedGoals;
     });
+
+    try{
+      const response  = await fetch("/api/goals/reorder", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          goalIds: reorderedGoals.map((goal)=> goal.id),
+        }),
+      });
+      
+      if (!response.ok){
+        throw new Error("Failed to save goal order");
+      }
+    }
+    catch(error){
+      console.error("Failed to save goal order:", error)
+    }
   }
 
   //three dot menu open / close state
