@@ -18,12 +18,13 @@ export async function GET(){
         // if we only fetched goals, route wouldnt not have
         // enough information to calculate progress
         const goals = await prisma.goal.findMany({
+            orderBy:{ 
+                order: "asc"
+            },
             include: {
                 tasks: true,
             },
-            orderBy:{ 
-                createdAt: "desc"
-            },
+            
         });
 
         // this finally adds the progress to last variable
