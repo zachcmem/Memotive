@@ -19,12 +19,14 @@ import { calculateProgress } from "@/lib/progress";
 //imports the drag-and-drop features
 import {
   DndContext,
-  closestCenter
+  closestCenter,
+  DragEndEvent
 } from "@dnd-kit/core";
 
 import {
   SortableContext,
   verticalListSortingStrategy,
+  arrayMove
 } from "@dnd-kit/sortable";
 
 
@@ -247,29 +249,55 @@ export default function Home() {
   catch(error){
     console.error("Failed to update goal: ", error)
   }
-}
+  }
 
-async function handleUpdateTask(taskId: string, updatedTitle: string){
-  console.log("handleUpdateTask called: ", taskId, updatedTitle)
-  try{
-    const updatedTask = await updateTask(taskId, {
-      title: updatedTitle,
+  async function handleUpdateTask(taskId: string, updatedTitle: string){
+    console.log("handleUpdateTask called: ", taskId, updatedTitle)
+    try{
+      const updatedTask = await updateTask(taskId, {
+        title: updatedTitle,
+      });
+
+      setGoals((currentGoals) =>
+        currentGoals.map((goal)=> ({
+          ...goal,
+          tasks: goal.tasks.map((task) =>
+            task.id === taskId ? updatedTask : task
+          ),
+        }))
+      );
+    }
+    catch(error){
+      console.error("Failed to update task: ", error)
+    }
+    
+  }
+
+  function handleDragEnd(event: DragEndEvent){
+    const {active, over} = event;
+    if(!over) {
+      return;
+    }
+    if(active.id === over.id){
+      return;
+    }
+
+    setGoals((currentGoals)=>{
+      const oldIndex = currentGoals.findIndex(
+        (goal)=> goal.id === active.id
+      );
+
+      const newIndex = currentGoals.findIndex(
+        (goal)=> goal.id === over.id
+      );
+
+      if (oldIndex === 1 || newIndex === -1){
+        return currentGoals;
+      }
+
+      return arrayMove(currentGoals, oldIndex, newIndex);
     });
-
-    setGoals((currentGoals) =>
-      currentGoals.map((goal)=> ({
-        ...goal,
-        tasks: goal.tasks.map((task) =>
-          task.id === taskId ? updatedTask : task
-        ),
-      }))
-    );
   }
-  catch(error){
-    console.error("Failed to update task: ", error)
-  }
-  
-}
 
   //three dot menu open / close state
   //    null = no menu open
@@ -303,7 +331,10 @@ async function handleUpdateTask(taskId: string, updatedTitle: string){
     
     <div className=" space-y-6">
       {/* drag and drop wrapper */}
-      <DndContext collisionDetection={closestCenter}>
+      <DndContext 
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
         <SortableContext
           // tells dnd-kit that they are sorted on the goal array
           items={goals.map((goal)=> goal.id)}

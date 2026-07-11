@@ -114,8 +114,6 @@ export default function GoalCard({
         <section
             ref={setNodeRef}
             style={style}
-            {...attributes}
-            {...listeners}
 
             className={`relative rounded-lg border p-6 shadow transition ${
                 isDragging
@@ -147,6 +145,16 @@ export default function GoalCard({
                     setIsCollapsed(false)
                 }}
             />
+
+            <button
+                type="button"
+                {...attributes}
+                {...listeners}
+                className="absolute right-16 top-4 rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200 cursor-grab active:cursor-grabbing"
+                aria-label="Drag goal"
+            >
+                ☰
+            </button>
             
             {/* the state of the goalCard depends on if its editing or not */}
             {isEditing ? (   
