@@ -159,15 +159,64 @@ export default function GoalCard({
                 }}
             />
 
-            <button
-                type="button"
-                {...attributes}
-                {...listeners}
-                className="absolute right-16 top-4 rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200 cursor-grab active:cursor-grabbing"
-                aria-label="Drag goal"
-            >
-                ☰
-            </button>
+            <div className="absolute right-16 top-4">
+                <button
+                    type="button"
+                    {...attributes}
+                    {...listeners}
+                    onClick={()=> setIsReorderMenuOpen((current)=> !current)}
+                    className="absolute right-16 top-4 rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200 cursor-grab active:cursor-grabbing"
+                    aria-label="Drag goal"
+                >
+                    ☰
+                </button>
+
+                {isReorderMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-40 rounded border border-neutral-700 bg-neutral-900 p-1 shadow-lg z-20">
+                        <button
+                            type="button"
+                            onClick={()=> {
+                                onMoveToTop(goal.id);
+                                setIsReorderMenuOpen(false);
+                            }}
+                            className="block w-full rounded px-3 py-2 text-left text-sm text-white hover"bg-neutral-800
+                        >
+                            Send to Top
+                        </button>
+                        <button
+                            type="button"
+                            onClick={()=> {
+                                onMoveUp(goal.id);
+                                setIsReorderMenuOpen(false);
+                            }}
+                            className="block w-full rounded px-3 py-2 text-left text-sm text-white hover"bg-neutral-800
+                        >
+                            Move Up 1
+                        </button>
+                        <button
+                            type="button"
+                            onClick={()=> {
+                                onMoveDown(goal.id);
+                                setIsReorderMenuOpen(false);
+                            }}
+                            className="block w-full rounded px-3 py-2 text-left text-sm text-white hover"bg-neutral-800
+                        >
+                            Move Down 1
+                        </button>
+                        <button
+                            type="button"
+                            onClick={()=> {
+                                onMoveToBottom(goal.id);
+                                setIsReorderMenuOpen(false);
+                            }}
+                            className="block w-full rounded px-3 py-2 text-left text-sm text-white hover"bg-neutral-800
+                        >
+                            Move To Bottom
+                        </button>
+                    </div>
+                )}
+            </div>
+            
             
             {/* the state of the goalCard depends on if its editing or not */}
             {isEditing ? (   
