@@ -12,6 +12,7 @@ import ProgressBar from "./ProgressBar";
 import ThreeDotMenu from "./ThreeDotMenu";
 import AddTaskForm from "./AddTaskForm";
 import { useState, useRef, useEffect } from "react";
+import GoalReorderMenu from "./GoalReorderMenu";
 
 import { useSortable} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -203,59 +204,15 @@ export default function GoalCard({
             
 
             <div ref={reorderMenuRef} className="absolute right-16 top-4">
-                <button
-                    type="button"
-                    onClick={()=> setIsReorderMenuOpen((current)=> !current)}
-                    className="rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200"
-                    aria-label="Open reorder menu"
-                >
-                    ☰
-                </button>
-
-                {isReorderMenuOpen && (
-                    <div className="absolute right-0 top-12 w-39 rounded rounded-lg border border-teal-200 bg-slate-800 p-2 shadow-lg">
-                        <button
-                            type="button"
-                            onClick={()=> {
-                                onMoveToTop(goal.id);
-                                setIsReorderMenuOpen(false);
-                            }}
-                            className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black bg-white font-bold hover:bg-teal-200"
-                        >
-                            Send to Top
-                        </button>
-                        <button
-                            type="button"
-                            onClick={()=> {
-                                onMoveUp(goal.id);
-                                setIsReorderMenuOpen(false);
-                            }}
-                            className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black bg-white font-bold hover:bg-teal-200"
-                        >
-                            Move Up 1
-                        </button>
-                        <button
-                            type="button"
-                            onClick={()=> {
-                                onMoveDown(goal.id);
-                                setIsReorderMenuOpen(false);
-                            }}
-                            className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black font-bold bg-white hover:bg-teal-200"
-                        >
-                            Move Down 1
-                        </button>
-                        <button
-                            type="button"
-                            onClick={()=> {
-                                onMoveToBottom(goal.id);
-                                setIsReorderMenuOpen(false);
-                            }}
-                            className="block w-full rounded px-3 py-2 text-left text-sm text-black bg-white font-bold hover:bg-teal-200"
-                        >
-                            Move To Bottom
-                        </button>
-                    </div>
-            )}
+                <GoalReorderMenu
+                    goalId={goal.id}
+                    isOpen={isReorderMenuOpen}
+                    setIsOpen={setIsReorderMenuOpen}
+                    onMoveToTop={onMoveToTop}
+                    onMoveUp={onMoveUp}
+                    onMoveDown={onMoveDown}
+                    onMoveToBottom={onMoveToBottom}
+                />
             </div>
 
             
