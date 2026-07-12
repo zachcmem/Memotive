@@ -355,9 +355,32 @@ export default function Home() {
     await saveGoalOrder(reorderedGoals) // save them in database
   }
 
-  // async function moveGoalToBottom(goalId: string){
-  //   const oldIndex = goals.filter((goal)=>)
-  // }
+  async function moveGoalToBottom(goalId: string){
+    const oldIndex = goals.findIndex((goal)=> goal.id === goalId);
+    if(oldIndex === -1 || oldIndex >= goals.length - 1){ // if last in the array already
+      return;
+    }
+
+    const goalToMove = goals[oldIndex];
+    const reorderedGoals = [
+      ...goals.filter((goal)=> goal.id !== goalId),
+      goalToMove
+    ]
+    setGoals(reorderedGoals);
+    await saveGoalOrder(reorderedGoals);
+  }
+
+  async function moveGoalDown(goalId: string){
+    const oldIndex = goals.findIndex((goal)=> goal.id === goalId);
+    if(oldIndex === -1 || oldIndex >= goals.length -1){
+      return;
+    }
+
+    const goalToMove = goals[oldIndex];
+    const reorderedGoals = arrayMove(goals, oldIndex, oldIndex + 1);
+    setGoals(reorderedGoals);
+    await saveGoalOrder(reorderedGoals);
+  }
 
   //three dot menu open / close state
   //    null = no menu open
