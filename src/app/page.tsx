@@ -440,6 +440,10 @@ export default function Home() {
               taskTitles={taskTitles}
               setTaskTitles={setTaskTitles}
               handleUpdateTask={handleUpdateTask}
+              onMoveToTop={moveGoalToTop}
+              onMoveUp={moveGoalUp}
+              onMoveDown={moveGoalDown}
+              onMoveToBottom={moveGoalToBottom}
             />
           ))}
         </SortableContext>

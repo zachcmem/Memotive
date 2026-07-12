@@ -56,6 +56,10 @@ type GoalCardProps = {
         taskId: string, 
         updatedTitle: string
     ) => Promise<void>;
+    onMoveToTop: (goalId:string) => void;
+    onMoveUp: (goalId:string) => void;
+    onMoveDown: (goalId:string)=> void;
+    onMoveToBottom: (goalId:string)=> void;
 };
 
 
@@ -73,6 +77,10 @@ export default function GoalCard({
     taskTitles,
     setTaskTitles,
     handleUpdateTask,
+    onMoveToTop,
+    onMoveUp,
+    onMoveDown,
+    onMoveToBottom,
 }: GoalCardProps){
 
     //useStates for editing
@@ -84,6 +92,11 @@ export default function GoalCard({
     const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 
     const [isCollapsed, setIsCollapsed] = useState(false);
+
+    // menu state for dragability
+    const [isReorderMenuOpen, setIsReorderMenuOpen] = useState(false);
+
+
     // handles the save editing button
     //     classes the update goal function
     //     sets editing state to false
