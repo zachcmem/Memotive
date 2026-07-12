@@ -326,6 +326,39 @@ export default function Home() {
     }
   }
 
+  async function moveGoalToTop(goalId: string){
+    // brings a certain goal to the first position of the
+    // goal array
+
+    const oldIndex = goals.findIndex((goal)=> goal.id === goalId);
+    if (oldIndex <= 0){ // if the goal is already at the top
+      return;
+    }
+    const goalToMove = goals[oldIndex];
+    const reorderedGoals = [
+      goalToMove,
+      ...goals.filter((goal)=> goal.id !== goalId)
+    ] // puts goal first, then maps goals where goalid isnt the goal
+
+    setGoals(reorderedGoals); //maps goals to dash
+    await saveGoalOrder(reorderedGoals);
+  }
+
+  async function moveGoalUp(goalId: string){
+    const oldIndex = goals.findIndex((goal)=> goal.id === goalId);
+    if(oldIndex <= 0){ //if the goal is already at the top
+      return;
+    }
+    const reorderedGoals = arrayMove(goals, oldIndex, oldIndex - 1)
+    // make the goal go up one
+    setGoals(reorderedGoals); // put them on dash
+    await saveGoalOrder(reorderedGoals) // save them in database
+  }
+
+  // async function moveGoalToBottom(goalId: string){
+  //   const oldIndex = goals.filter((goal)=>)
+  // }
+
   //three dot menu open / close state
   //    null = no menu open
   //    goal.id = this goal's menu is open
