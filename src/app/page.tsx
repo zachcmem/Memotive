@@ -274,6 +274,7 @@ export default function Home() {
   }
 
   async function handleDragEnd(event: DragEndEvent){
+    // uses helper function saveGoalOrder()
     const {active, over} = event;
     if(!over) {
       return;
@@ -282,44 +283,46 @@ export default function Home() {
       return;
     }
 
-    let reorderedGoals: typeof goals = [];
+    const oldIndex = goals.findIndex((goal)=> goal.id === active.id);
+    const newIndex = goals.findIndex((goal)=> goal.id === over.id);
 
-    setGoals((currentGoals)=>{
-      const oldIndex = currentGoals.findIndex(
-        (goal)=> goal.id === active.id
-      );
+    if (oldIndex === -1 || newIndex === -1){
+      return;
+    }
 
-      const newIndex = currentGoals.findIndex(
-        (goal)=> goal.id === over.id
-      );
+    const reorderedGoals = arrayMove(goals, oldIndex, newIndex);
 
-      if (oldIndex === 1 || newIndex === -1){
-        reorderedGoals = currentGoals;
-        return currentGoals;
-      }
+    setGoals(reorderedGoals);
 
-      reorderedGoals = arrayMove(currentGoals, oldIndex, newIndex);
+    await saveGoalOrder(reorderedGoals);
 
-      return reorderedGoals;
-    });
 
+  }
+
+  async function saveGoalOrder(reorderedGoals: typeof goals){
+    // since drag and drop menu buttons both reorder goals
+    // it helps to make 1 helper function
+    // used by handleDragEnd and 
     try{
-      const response  = await fetch("/api/goals/reorder", {
+      const response = await fetch("/api/goals/reorder", {
         method: "PATCH",
-        headers: {
+        headers:{
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          goalIds: reorderedGoals.map((goal)=> goal.id),
+          goalIds: reorderedGoals.map((goal)=> goal.id)
         }),
       });
-      
-      if (!response.ok){
+
+      if(!response.ok){
+        const errorData = await response.json();
+        console.error("Reorder response status:", response.status);
+        console.error("Reorder response body:", errorData);
         throw new Error("Failed to save goal order");
       }
     }
     catch(error){
-      console.error("Failed to save goal order:", error)
+      console.error("Failed to save goal order: ", error)
     }
   }
 
