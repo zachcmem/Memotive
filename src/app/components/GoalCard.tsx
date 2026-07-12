@@ -11,7 +11,7 @@ import TaskList from "./TaskList";
 import ProgressBar from "./ProgressBar";
 import ThreeDotMenu from "./ThreeDotMenu";
 import AddTaskForm from "./AddTaskForm";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { useSortable} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -95,6 +95,9 @@ export default function GoalCard({
 
     // menu state for dragability
     const [isReorderMenuOpen, setIsReorderMenuOpen] = useState(false);
+    //use ref states
+    const threeDotsMenuRef = useRef<HTMLDivElement>(null);
+    const reorderMenuRef = useRef<HTMLDivElement>(null);
 
 
     // handles the save editing button
@@ -105,6 +108,32 @@ export default function GoalCard({
         setEditingTaskId(null);
         setIsEditing(false);
     }
+
+    useEffect(()=> {
+        // When user clicks anywhere on the document,
+        // check whether that click happened outside each menu wrapper.
+        // If it did, close that menu.
+        function handleClickOutside(event: MouseEvent){
+            const target = event.target as Node;
+            if (
+                threeDotsMenuRef.current &&
+                !threeDotsMenuRef.current.contains(target)
+            ){
+                setOpenGoalMenuId(null);
+            }
+            if(
+                reorderMenuRef.current &&
+                !reorderMenuRef.current.contains(target)
+            ){
+                setIsReorderMenuOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+
+    }, []);
 
     //for drag and drop
     const {
@@ -159,19 +188,21 @@ export default function GoalCard({
                 }}
             />
 
-        
-            <button
+            <div ref={threeDotsMenuRef}>
+                <button
                 type="button"
                 {...attributes}
                 {...listeners}
                 onClick={()=> setIsReorderMenuOpen((current)=> !current)}
                 className="absolute right-28 top-4 rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200 cursor-grab active:cursor-grabbing"
                 aria-label="Drag goal"
-            >
-                ↕
-            </button>
+                >
+                    ↕
+                </button>
+            </div>
+            
 
-            <div className="absolute right-16 top-4">
+            <div ref={reorderMenuRef} className="absolute right-16 top-4">
                 <button
                     type="button"
                     onClick={()=> setIsReorderMenuOpen((current)=> !current)}
