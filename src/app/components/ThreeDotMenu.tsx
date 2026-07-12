@@ -31,7 +31,7 @@ export default function ThreeDotMenu({
             </button>
             
             {openMenuId === itemId && (
-            <div className="absolute right-4 top-12 z-10 w-32 rounded-lg border border-teal-200 bg-slate-800 p-2 shadow-lg">
+            <div className="absolute right-4 top-12 z-10 w-32 mt-2 rounded-lg border border-teal-200 bg-slate-800 p-2 shadow-lg">
                 <button
                 type="button"
                 onClick={()=> {
@@ -39,7 +39,7 @@ export default function ThreeDotMenu({
                     onEdit(); 
                     setOpenMenuId(null);
                 }}
-                className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black bg-white hover:bg-teal-200"
+                className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black font-bold bg-white hover:bg-teal-200"
                 >
                     Edit
                 </button>
@@ -55,7 +55,7 @@ export default function ThreeDotMenu({
                     onDelete(itemId)
                     setOpenMenuId(null);
                 }}
-                className="block w-full rounded px-3 py-2 text-left text-sm text-black bg-white hover:bg-teal-200"
+                className="block w-full rounded px-3 py-2 text-left text-sm text-black font-bold bg-white hover:bg-red-300"
                 >
                     Delete
                 </button>

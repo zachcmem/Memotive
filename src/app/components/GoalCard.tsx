@@ -159,27 +159,37 @@ export default function GoalCard({
                 }}
             />
 
+        
+            <button
+                type="button"
+                {...attributes}
+                {...listeners}
+                onClick={()=> setIsReorderMenuOpen((current)=> !current)}
+                className="absolute right-28 top-4 rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200 cursor-grab active:cursor-grabbing"
+                aria-label="Drag goal"
+            >
+                ↕
+            </button>
+
             <div className="absolute right-16 top-4">
                 <button
                     type="button"
-                    {...attributes}
-                    {...listeners}
                     onClick={()=> setIsReorderMenuOpen((current)=> !current)}
-                    className="absolute right-16 top-4 rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200 cursor-grab active:cursor-grabbing"
-                    aria-label="Drag goal"
+                    className="rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200"
+                    aria-label="Open reorder menu"
                 >
                     ☰
                 </button>
 
                 {isReorderMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-40 rounded border border-neutral-700 bg-neutral-900 p-1 shadow-lg z-20">
+                    <div className="absolute right-0 top-12 w-39 rounded rounded-lg border border-teal-200 bg-slate-800 p-2 shadow-lg">
                         <button
                             type="button"
                             onClick={()=> {
                                 onMoveToTop(goal.id);
                                 setIsReorderMenuOpen(false);
                             }}
-                            className="block w-full rounded px-3 py-2 text-left text-sm text-white hover"bg-neutral-800
+                            className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black bg-white font-bold hover:bg-teal-200"
                         >
                             Send to Top
                         </button>
@@ -189,7 +199,7 @@ export default function GoalCard({
                                 onMoveUp(goal.id);
                                 setIsReorderMenuOpen(false);
                             }}
-                            className="block w-full rounded px-3 py-2 text-left text-sm text-white hover"bg-neutral-800
+                            className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black bg-white font-bold hover:bg-teal-200"
                         >
                             Move Up 1
                         </button>
@@ -199,7 +209,7 @@ export default function GoalCard({
                                 onMoveDown(goal.id);
                                 setIsReorderMenuOpen(false);
                             }}
-                            className="block w-full rounded px-3 py-2 text-left text-sm text-white hover"bg-neutral-800
+                            className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black font-bold bg-white hover:bg-teal-200"
                         >
                             Move Down 1
                         </button>
@@ -209,13 +219,16 @@ export default function GoalCard({
                                 onMoveToBottom(goal.id);
                                 setIsReorderMenuOpen(false);
                             }}
-                            className="block w-full rounded px-3 py-2 text-left text-sm text-white hover"bg-neutral-800
+                            className="block w-full rounded px-3 py-2 text-left text-sm text-black bg-white font-bold hover:bg-teal-200"
                         >
                             Move To Bottom
                         </button>
                     </div>
-                )}
+            )}
             </div>
+
+            
+           
             
             
             {/* the state of the goalCard depends on if its editing or not */}
