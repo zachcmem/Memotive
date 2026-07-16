@@ -397,7 +397,7 @@ export default function Home() {
   }
 
  return (
-  <main className="min-h-screen bg-black text-white p-8">
+  <main className="mx-auto min-h-screen max-w-7xl p-8">
     <header className="mb-8">
       <h1 className="text-3xl text-neutral font-bold ">Memotive Dashboard</h1>
       <p className="text-neutral-100 font-bold">Track your goals, tasks, and progress.</p>

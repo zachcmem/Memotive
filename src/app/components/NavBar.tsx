@@ -44,13 +44,13 @@ export default function Navbar(){
                         </Link>
                     ))}
                 </div>
-                Temporary account button
+                {/* Temporary account button */}
                 <button
                     type="button"
                     aria-label="Open Account Menu"
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-white font-semibold text-black transition hover:bg-teal-200"
                 >
-                    A
+                    Z
                 </button>
             </nav>
         </header>
