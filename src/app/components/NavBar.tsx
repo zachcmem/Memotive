@@ -1,5 +1,8 @@
 
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navigationLinks = [
     {
@@ -21,6 +24,9 @@ const navigationLinks = [
 ];
 
 export default function Navbar(){
+    // retrieves current route
+    const pathname = usePathname();
+
     return(
         <header className="border-b border-neutral-800 bg-neutral-950">
             <nav className="mx-auto flex max-w-7xl items-center justify-between px-8 py-4">
@@ -34,15 +40,29 @@ export default function Navbar(){
                 {/* Page Navigation */}
                 <div className="flex items-center gap-8">
                     {/* maps the link array above */}
-                    {navigationLinks.map((link) => (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className="text-sm font-medium text-neutral-300 transition hover:text-teal-200"
-                        >
-                            {link.label}
-                        </Link>
-                    ))}
+                    {navigationLinks.map((link) => {
+                        //compare each link with selected link
+                        const isActive = pathname === link.href;
+
+                        return(
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                //Using a transparent border on inactive links prevents
+                                //  the navbar text from slightly shifting when a link 
+                                // becomes active.
+                                className={`border-b-2 pb-1 text-sm font-medium transition ${
+                                    isActive
+                                        ? "border-teal-200 text-teal-200"
+                                        : "border-transparent text-neutral-300 hover:text-teal-200"
+                                }`}
+                            >
+                                {link.label}
+                            </Link>
+                        );
+                    }
+                        
+                    )}
                 </div>
                 {/* Temporary account button */}
                 <button
