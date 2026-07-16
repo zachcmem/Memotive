@@ -116,12 +116,12 @@ export default function GoalCard({
         // If it did, close that menu.
         function handleClickOutside(event: MouseEvent){
             const target = event.target as Node;
-            if (
-                threeDotsMenuRef.current &&
-                !threeDotsMenuRef.current.contains(target)
-            ){
-                setOpenGoalMenuId(null);
-            }
+            // if (
+            //     threeDotsMenuRef.current &&
+            //     !threeDotsMenuRef.current.contains(target)
+            // ){
+            //     setOpenGoalMenuId(null);
+            // }
             if(
                 reorderMenuRef.current &&
                 !reorderMenuRef.current.contains(target)
@@ -129,9 +129,9 @@ export default function GoalCard({
                 setIsReorderMenuOpen(false);
             }
         }
-        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("click", handleClickOutside);
         return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("click", handleClickOutside);
         };
 
     }, []);
@@ -178,29 +178,30 @@ export default function GoalCard({
             </button>
 
 
-            <ThreeDotMenu
-                itemId={goal.id}
-                openMenuId={openGoalMenuId}
-                setOpenMenuId={setOpenGoalMenuId}
-                onDelete={handleDeleteGoal}
-                onEdit={() => {
-                    setIsEditing(true)
-                    setIsCollapsed(false)
-                }}
-            />
-
             <div ref={threeDotsMenuRef}>
-                <button
+                <ThreeDotMenu
+                    itemId={goal.id}
+                    openMenuId={openGoalMenuId}
+                    setOpenMenuId={setOpenGoalMenuId}
+                    onDelete={handleDeleteGoal}
+                    onEdit={() => {
+                        setIsEditing(true)
+                        setIsCollapsed(false)
+                    }}
+                />
+            </div>
+
+            
+            <button
                 type="button"
                 {...attributes}
                 {...listeners}
-                onClick={()=> setIsReorderMenuOpen((current)=> !current)}
                 className="absolute right-28 top-4 rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200 cursor-grab active:cursor-grabbing"
                 aria-label="Drag goal"
                 >
                     ↕
-                </button>
-            </div>
+            </button>
+     
             
 
             <div ref={reorderMenuRef} className="absolute right-16 top-4">

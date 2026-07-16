@@ -1,4 +1,5 @@
 //imports
+import { useEffect, useRef } from "react";
 
 // types 
 
@@ -19,19 +20,45 @@ export default function ThreeDotMenu({
     onDelete,
     onEdit,
 }: ThreeDotMenuProps){
+
+    const menuRef = useRef<HTMLDivElement>(null);
+    const isOpen = openMenuId === itemId;
+
+    //own use effect because the other wasnt working
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+        const target = event.target as Node;
+
+        if (menuRef.current && !menuRef.current.contains(target)) {
+            setOpenMenuId(null);
+        }
+        }
+
+        if (isOpen) {
+        document.addEventListener("click", handleClickOutside);
+        }
+
+        return () => {
+        document.removeEventListener("click", handleClickOutside);
+        };
+    }, [isOpen, setOpenMenuId]);
+
     return(
-        <>
+        <div ref={menuRef} className="absolute right-4 top-4">
             {/* MENU OPTION BUTTON */}
             <button
             type="button"
-            onClick={()=> setOpenMenuId(openMenuId === itemId ? null : itemId)}
-            className="absolute right-4 top-4 rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200"
+            onClick={(event)=> {
+                event.stopPropagation();
+                setOpenMenuId(openMenuId === itemId ? null : itemId);
+            }}
+            className="rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200"
             >
                 ...
             </button>
             
             {openMenuId === itemId && (
-            <div className="absolute right-4 top-12 z-10 w-32 mt-2 rounded-lg border border-teal-200 bg-slate-800 p-2 shadow-lg">
+            <div className="absolute right-0 top-8 z-20 w-32 mt-2 rounded-lg border border-teal-200 bg-slate-800 p-2 shadow-lg">
                 <button
                 type="button"
                 onClick={()=> {
@@ -60,7 +87,7 @@ export default function ThreeDotMenu({
                     Delete
                 </button>
             </div>
-        )}
-        </>
+            )}
+        </div>
     )
 }
