@@ -10,6 +10,7 @@ type ThreeDotMenuProps = {
     setOpenMenuId: (itemId: string | null) => void;
     onDelete: (itemId: string) => void;
     onEdit: () => void;
+    onArchive: (itemId: string)=> void;
 }
 //function
 
@@ -19,6 +20,7 @@ export default function ThreeDotMenu({
     setOpenMenuId,
     onDelete,
     onEdit,
+    onArchive
 }: ThreeDotMenuProps){
 
     const menuRef = useRef<HTMLDivElement>(null);
@@ -69,6 +71,17 @@ export default function ThreeDotMenu({
                 className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black font-bold bg-white hover:bg-teal-200"
                 >
                     Edit
+                </button>
+                <button
+                    type="button"
+                    onClick={(event)=> {
+                        event.stopPropagation();
+                        setOpenMenuId(null);
+                        onArchive(itemId);
+                    }}
+                    className="mb-2 block w-full rounded px-3 py-2 text-left text-sm text-black font-bold bg-white hover:bg-teal-200"
+                >
+                    Archive
                 </button>
 
                 <button

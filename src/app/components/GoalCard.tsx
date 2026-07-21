@@ -61,6 +61,7 @@ type GoalCardProps = {
     onMoveUp: (goalId:string) => void;
     onMoveDown: (goalId:string)=> void;
     onMoveToBottom: (goalId:string)=> void;
+    handleArchiveGoal: (goalId:string)=> Promise<void>;
 };
 
 
@@ -82,6 +83,7 @@ export default function GoalCard({
     onMoveUp,
     onMoveDown,
     onMoveToBottom,
+    handleArchiveGoal,
 }: GoalCardProps){
 
     //useStates for editing
@@ -188,6 +190,7 @@ export default function GoalCard({
                         setIsEditing(true)
                         setIsCollapsed(false)
                     }}
+                    onArchive={handleArchiveGoal}
                 />
             </div>
 

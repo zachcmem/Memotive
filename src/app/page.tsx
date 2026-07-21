@@ -467,6 +467,7 @@ export default function Home() {
               onMoveUp={moveGoalUp}
               onMoveDown={moveGoalDown}
               onMoveToBottom={moveGoalToBottom}
+              handleArchiveGoal={handleArchiveGoal}
             />
           ))}
         </SortableContext>
