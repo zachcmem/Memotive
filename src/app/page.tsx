@@ -12,6 +12,7 @@ import{
   deleteTask,
   updateGoal,
   updateTask,
+  archiveGoal,
 } from "@/lib/api";
 
 import { calculateProgress } from "@/lib/progress";
@@ -380,6 +381,28 @@ export default function Home() {
     const reorderedGoals = arrayMove(goals, oldIndex, oldIndex + 1);
     setGoals(reorderedGoals);
     await saveGoalOrder(reorderedGoals);
+  }
+
+  async function handleArchiveGoal(goalId: string){
+    const confirmed = window.confirm(
+      "Archive thi sgoal? It will be removed from your dashboard but can be restored later."
+    );
+
+    if(!confirmed){
+      return;
+    }
+    try{
+      await archiveGoal(goalId);
+      //removes the archived goal from the dashboard immediately
+      // only removes after await succeeds
+      setGoals((currentGoals)=>
+        currentGoals.filter((goal)=> goal.id !== goalId)
+      );
+
+    }
+    catch(error){
+      console.error("Failed to archive goal: ", error)
+    }
   }
 
   //three dot menu open / close state

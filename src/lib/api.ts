@@ -124,3 +124,16 @@ export async function updateTask(
     }
     return response.json()
 }
+
+//API helper for archive handling
+export async function archiveGoal(goalId: string){
+    const response = await fetch(`api/goals/${goalId}/archive`,{
+        method: "PATCH"
+    });
+    if(!response.ok){
+        throw new Error("Failed to archive goal")
+    }
+    return response.json();
+}{
+
+}
