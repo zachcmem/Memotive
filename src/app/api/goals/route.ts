@@ -18,6 +18,9 @@ export async function GET(){
         // if we only fetched goals, route wouldnt not have
         // enough information to calculate progress
         const goals = await prisma.goal.findMany({
+            where: {
+                archived: false,
+            },
             orderBy:{ 
                 order: "asc"
             },
@@ -125,6 +128,7 @@ export async function POST(request: Request){
             data:{
                 title: body.title,
                 description: body.description || null,
+                
             },
             include: {
                 tasks: true,
