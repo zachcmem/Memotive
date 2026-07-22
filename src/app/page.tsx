@@ -413,7 +413,19 @@ export default function Home() {
   
 
   if(loading){
-    return<main>Loading Goals...</main>
+    return(
+      <main className="flex min-h-screen items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+              <p className="text-sm text-neutral-400">
+                  Loading archived goals...
+              </p>
+              <div className="relative flex h-16 w-16 items-center justify-center">
+                  <div className="absolute h-16 w-16 animate-ping rounded-full bg-teal-200/10" />
+                  <div className="relative h-12 w-12 animate-spin rounded-full border-4 border-neutral-700 border-t-teal-200" />
+              </div>
+          </div>
+      </main>
+    );
   }
   if (error){
     return<main>{error}</main>
