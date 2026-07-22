@@ -134,6 +134,14 @@ export async function archiveGoal(goalId: string){
         throw new Error("Failed to archive goal")
     }
     return response.json();
-}{
+}
 
+export async function getArchivedGoals(){
+    const response = await fetch("/api/archives");
+
+    if(!response.ok){
+        throw new Error("Failed to fetch archived goals");
+    }
+
+    return response.json();
 }
