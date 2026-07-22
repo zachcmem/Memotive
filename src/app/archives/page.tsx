@@ -15,22 +15,6 @@ import {
 import ProgressBar from "../components/ProgressBar";
 import type { ArchivedGoal, } from "@/types";
 
-// type Task = {
-//     id: string;
-//     title: string;
-//     completed: boolean;
-//     goalId: string;
-// }
-
-// type ArchivedGoal = {
-//     id: string;
-//     title: string;
-//     description: string | null;
-//     createdAt: string;
-//     archivedAt: string | null;
-//     progress: number;
-//     tasks: Task[];
-// }
 
 export default function ArchivesPage(){
 
@@ -83,6 +67,31 @@ export default function ArchivesPage(){
         )
     }
 
+    //handles restoration
+    async function handleRestoreGoal(goalId: string){
+        //window module for confirmation
+        const confirmed = window.confirm(
+            "Restore this goal? It will return to the bottom of your dashboard."
+        );
+
+        if(!confirmed){
+            return;
+        }
+
+        try{
+            // first confirms that database updated successfully
+            await restoreGoal(goalId);
+            // removes it from the archives page immediately
+            setArchivedGoals((currentGoals)=>
+                currentGoals.filter((goal)=> goal.id !== goalId)
+            );
+        }
+        catch(error){
+            console.error("Failed to restore goal: " , error)
+            setError("Failed to restore goal.")
+        }
+    }
+
     return(
         <main className="mx-auto min-h-screen max-w-7xl p-8">
             <div className="rounded-lg border border-teal-200 bg-neutral-900 p-6 shadow">
@@ -113,10 +122,20 @@ export default function ArchivesPage(){
                             key={goal.id}
                             className="rounded-lg mt-4 border bg-neutral-900 p-6 shadow"
                         >
-                            <div className="mb-4">
-                                <h2 className="text-2xl font-semibold text-white">
+                            <div className="mb-3">
+                                <div className="flex items-center justify-between gap-4">
+                                    <h2 className="text-2xl font-semibold text-white">
                                     {goal.title}
-                                </h2>
+                                    </h2>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRestoreGoal(goal.id)}
+                                        className="rounded bg-white px-4 py-2 font-medium text-black transition hover:bg-teal-200"
+                                    >
+                                        Restore Goal
+                                    </button>
+                                </div>
+                                
                                 {/* if theres a goal description */}
                                 {goal.description && (
                                     <p className="mt-2 text-neutral-300">
@@ -167,6 +186,9 @@ export default function ArchivesPage(){
                                 )}
                             </div>
                             
+                            
+                            
+                                
                             {/* archived goal information */}
                             {goal.archivedAt && (
                                 <p className="mt-5 text-sm text-neutral-500">
@@ -174,6 +196,10 @@ export default function ArchivesPage(){
                                     {new Date(goal.archivedAt).toLocaleDateString()}
                                 </p>
                             )}
+
+                            
+
+                            
                         </article>
                         ))}
                 </section>
