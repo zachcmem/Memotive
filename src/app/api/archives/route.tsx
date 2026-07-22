@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { calculateProgress } from "@/lib/progress";
 
+// retrieves full archive collection
 export async function GET(){
     try{
         const archivedGoals = await prisma.goal.findMany({

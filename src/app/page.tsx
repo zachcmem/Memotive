@@ -469,7 +469,7 @@ export default function Home() {
               onMoveToBottom={moveGoalToBottom}
               handleArchiveGoal={handleArchiveGoal}
             />
-          ))}
+          ))} 
         </SortableContext>
       </DndContext>
     </div>
