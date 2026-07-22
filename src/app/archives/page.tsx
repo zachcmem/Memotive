@@ -8,9 +8,12 @@
 // includes empty state
 
 import { useEffect, useState } from "react";
-import { getArchivedGoals } from "@/lib/api";
+import { 
+    getArchivedGoals,
+    restoreGoal, 
+} from "@/lib/api";
 import ProgressBar from "../components/ProgressBar";
-import type { ArchivedGoal } from "@/types";
+import type { ArchivedGoal, } from "@/types";
 
 // type Task = {
 //     id: string;

@@ -145,3 +145,14 @@ export async function getArchivedGoals(){
 
     return response.json();
 }
+
+//helper function for restoring goals
+export async function restoreGoal(goalId: string){
+    const response = await fetch(`/api/goals/${goalId}/restore`, {
+        method: "PATCH",
+    });
+    if(!response.ok){
+        throw new Error("Failed to restore goal");
+    }
+    return response.json()
+}
