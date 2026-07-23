@@ -184,102 +184,105 @@ export default function ArchivesPage(){
                         return(
                             <article
                                 key={goal.id}
-                                className="rounded-lg mt-4 border bg-neutral-900 p-6 shadow"
+                                className="rounded-lg mt-4 border border-teal-200 bg-neutral-900 p-6 shadow"
                             >
-                                <div className="mb-3">
-                                    <div className="flex items-center justify-between gap-3">
-                                        <h2 className="text-2xl font-semibold text-white">
-                                        {goal.title}
-                                        </h2>
-                                        <div className="flex items-center gap-2">
-                                            <button
-                                                type="button"
-                                                onClick={() => handleRestoreGoal(goal.id)}
-                                                disabled={processingGoalIdRestore === goal.id}
-                                                className="rounded bg-white px-2 py-2 font-medium text-black transition hover:bg-teal-200"
-                                            >
-                                                {/* // changes label in action run*/}
-                                                {processingGoalIdRestore === goal.id ? "Restoring..." : "Restore Goal"}
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={()=> handleToggleGoal(goal.id)}
-                                                aria-expanded={isExpanded}
-                                                className="rounded bg-white px-3 py-2 font-medium text-black transition hover:bg-teal-200"
-                                            >
-                                                {isExpanded ? "-" : "+"}
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDeleteArchivedGoal(goal.id)}
-                                                disabled={processingGoalIdDelete === goal.id}
-                                                className="rounded bg-white px-3 py-2 font-medium text-black transition hover:bg-red-300"
-                                            >
-                                                {/* // changes label in action run*/}
-                                                {processingGoalIdDelete === goal.id ? "Deleting Goal..." : "✖"}
-                                            </button>
-                                        </div>
+                                {/* always visable */}
+                                <div className=" mb-3 flex items-center justify-between gap-3">
+                                    <h2 className="text-2xl font-semibold text-white">
+                                    {goal.title}
+                                    </h2>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRestoreGoal(goal.id)}
+                                            disabled={processingGoalIdRestore === goal.id}
+                                            className="rounded bg-white px-2 py-2 font-medium text-black transition hover:bg-teal-200"
+                                        >
+                                            {/* // changes label in action run*/}
+                                            {processingGoalIdRestore === goal.id ? "Restoring..." : "Restore Goal"}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={()=> handleToggleGoal(goal.id)}
+                                            aria-expanded={isExpanded}
+                                            className="rounded bg-white px-3 py-2 font-medium text-black transition hover:bg-teal-200"
+                                        >
+                                            {isExpanded ? "+" : "-"}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDeleteArchivedGoal(goal.id)}
+                                            disabled={processingGoalIdDelete === goal.id}
+                                            className="rounded bg-white px-3 py-2 font-medium text-black transition hover:bg-red-300"
+                                        >
+                                            {/* // changes label in action run*/}
+                                            {processingGoalIdDelete === goal.id ? "Deleting Goal..." : "✖"}
+                                        </button>
                                     </div>
-                                    
-                                    {/* if theres a goal description */}
-                                    {goal.description && (
-                                        <p className="mt-2 text-neutral-300">
-                                            {goal.description}
-                                        </p>
-                                    )}
                                 </div>
-                                {/* progress bar component*/}
-                                <ProgressBar progress={goal.progress}/>
 
-                                <div className="mt-5">
-                                    <h3 className="mb-1 font-bold font-medium  text-white">
-                                        Tasks
-                                    </h3>
-
-                                    { goal.tasks.length === 0 ? (
-                                        // if theres tasks for this goal
-                                        <p className="text-sm text-neutral-500">
-                                            This goal has no tasks
-                                        </p>
-                                    ) : (
-                                        // if there are tasks for this goal, list them
-                                        // tasks summary
-                                        <>
-                                            <p className="mb-2 text-sm text-neutral-400">
-                                                {goal.tasks.filter((task)=> task.completed).length} of{" "}
-                                                {goal.tasks.length} tasks completed
+                                {isExpanded && (    
+                                    <div className="mt-3">    
+                                        {/* if theres a goal description */}
+                                        {goal.description && (
+                                            <p className="mt-2 text-neutral-300">
+                                                {goal.description}
                                             </p>
+                                        )}
                                         
-                                            <ul className="space-y-2">
-                                                {goal.tasks.map((task)=>(
-                                                    <li
-                                                        key={task.id}
-                                                        className="flex items-center gap-3 rounded bg-neutral-800 px-4 py-3"
-                                                    >
-                                                    <span
-                                                        className={`h-3 w-3 rounded-full ${
-                                                            task.completed
-                                                                ? "bg-teal-200"
-                                                                : "bg-neutral-500"
-                                                        }`}
-                                                    />
-                                                    <span
-                                                        className={
-                                                            task.completed
-                                                                ? "text-neutral-400 line-through"
-                                                                : "text-neutral-200"
-                                                        }
-                                                    >
-                                                        {task.title}
-                                                    </span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </>
-                                    )}
-                                </div>
-                                
-                                
+                                        {/* progress bar component*/}
+                                        <ProgressBar progress={goal.progress}/>
+
+                                        <div className="mt-5">
+                                            <h3 className="mb-1 font-bold font-medium  text-white">
+                                                Tasks
+                                            </h3>
+
+                                            { goal.tasks.length === 0 ? (
+                                                // if theres tasks for this goal
+                                                <p className="text-sm text-neutral-500">
+                                                    This goal has no tasks
+                                                </p>
+                                            ) : (
+                                                // if there are tasks for this goal, list them
+                                                // tasks summary
+                                                <>
+                                                    <p className="mb-2 text-sm text-neutral-400">
+                                                        {goal.tasks.filter((task)=> task.completed).length} of{" "}
+                                                        {goal.tasks.length} tasks completed
+                                                    </p>
+                                                
+                                                    <ul className="space-y-2">
+                                                        {goal.tasks.map((task)=>(
+                                                            <li
+                                                                key={task.id}
+                                                                className="flex items-center gap-3 rounded bg-neutral-800 px-4 py-3"
+                                                            >
+                                                            <span
+                                                                className={`h-3 w-3 rounded-full ${
+                                                                    task.completed
+                                                                        ? "bg-teal-200"
+                                                                        : "bg-neutral-500"
+                                                                }`}
+                                                            />
+                                                            <span
+                                                                className={
+                                                                    task.completed
+                                                                        ? "text-neutral-400 line-through"
+                                                                        : "text-neutral-200"
+                                                                }
+                                                            >
+                                                                {task.title}
+                                                            </span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </>
+                                            )}
+                                        </div>
+                                    
+                                    </div>
+                                )}
                                 
                                     
                                 {/* archived goal information */}
