@@ -194,15 +194,6 @@ export default function ArchivesPage(){
                                     <div className="flex items-center gap-2">
                                         <button
                                             type="button"
-                                            onClick={() => handleRestoreGoal(goal.id)}
-                                            disabled={processingGoalIdRestore === goal.id}
-                                            className="rounded bg-white px-2 py-2 font-medium text-black transition hover:bg-teal-200"
-                                        >
-                                            {/* // changes label in action run*/}
-                                            {processingGoalIdRestore === goal.id ? "Restoring..." : "Restore Goal"}
-                                        </button>
-                                        <button
-                                            type="button"
                                             onClick={()=> handleToggleGoal(goal.id)}
                                             aria-expanded={isExpanded}
                                             className="rounded bg-white px-3 py-2 font-medium text-black transition hover:bg-teal-200"
@@ -295,7 +286,15 @@ export default function ArchivesPage(){
                                             year: "numeric",
                                         })}
                                     </p>
-                                )}     
+                                )} 
+                                <button
+                                    type="button"
+                                    onClick={()=> handleRestoreGoal(goal.id)}
+                                    className="text-sm text-teal-300 hover:text-teal-200 hover:underline"
+                                    disabled={processingGoalIdRestore === goal.id}
+                                >   
+                                    {processingGoalIdRestore === goal.id ? "Restoring..." : "Restore Goal"}
+                                </button>    
                             </article>
                         )
                     })}
