@@ -10,7 +10,8 @@
 import { useEffect, useState } from "react";
 import { 
     getArchivedGoals,
-    restoreGoal, 
+    restoreGoal,
+    deleteGoal 
 } from "@/lib/api";
 import ProgressBar from "../components/ProgressBar";
 import type { ArchivedGoal, } from "@/types";
@@ -92,6 +93,31 @@ export default function ArchivesPage(){
         }
     }
 
+    //handles permanent deletion
+    async function handleDeleteArchivedGoal(goalId: string){
+        const confirmed = window.confirm(
+            "Delete this goal? It will be lost forever!"
+        );
+
+        if(!confirmed){
+            return;
+        }
+
+        try{
+            // calls the deleteGoal API helper
+            await deleteGoal(goalId)
+
+            // refreshes the goals
+            setArchivedGoals((currentGoals)=>
+                currentGoals.filter((goal)=> goal.id !== goalId)
+            );
+        }
+        catch(error){
+            console.error("Failed to permanently delete goal: ", error);
+            // update the set error state
+            setError("Failed to permanently delete goal");
+        }
+    }
     return(
         <main className="mx-auto min-h-screen max-w-7xl p-8">
             <div className="rounded-lg border border-teal-200 bg-neutral-900 p-6 shadow">
@@ -123,17 +149,26 @@ export default function ArchivesPage(){
                             className="rounded-lg mt-4 border bg-neutral-900 p-6 shadow"
                         >
                             <div className="mb-3">
-                                <div className="flex items-center justify-between gap-4">
+                                <div className="flex items-center justify-between gap-3">
                                     <h2 className="text-2xl font-semibold text-white">
                                     {goal.title}
                                     </h2>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleRestoreGoal(goal.id)}
-                                        className="rounded bg-white px-4 py-2 font-medium text-black transition hover:bg-teal-200"
-                                    >
-                                        Restore Goal
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRestoreGoal(goal.id)}
+                                            className="rounded bg-white px-2 py-2 font-medium text-black transition hover:bg-teal-200"
+                                        >
+                                            Restore Goal
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDeleteArchivedGoal(goal.id)}
+                                            className="rounded bg-white px-4 py-2 font-medium text-black transition hover:bg-teal-200"
+                                        >
+                                            -
+                                        </button>
+                                    </div>
                                 </div>
                                 
                                 {/* if theres a goal description */}
