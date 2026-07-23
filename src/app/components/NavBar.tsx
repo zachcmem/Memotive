@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
 
 const navigationLinks = [
     {
@@ -43,9 +44,17 @@ export default function Navbar(){
                     <Link
                         href="/"
                         onClick={handleMobileLinkClick}
-                        className="text-xl font-bold tracking-wide text-teal-200"
+                        className="flex shrink-0 items-center"
+                        aria-label="Go to dashboard"
                     >
-                        Memotive
+                        <Image
+                            src="/images/memotive-banner.png"
+                            alt="Memotive"
+                            width={180}
+                            height={60}
+                            priority
+                            className="h-14 w-auto sm:h-16"
+                        />
                     </Link>
                     {/* Desktop Navigation */}
                     <div className="flex items-center gap-8">
