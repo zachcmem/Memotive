@@ -25,7 +25,10 @@ export default function ArchivesPage(){
     const [isLoading, setIsLoading] = useState(true);
     // use state for error
     const [error, setError] = useState<string | null>(null);
+    // use state for disabling buttons while action runs
+    const [processingGoalIdRestore, setProcessingGoalIdRestore] = useState<string | null>(null);
 
+    const [processingGoalIdDelete, setProcessingGoalIdDelete] = useState<string | null>(null);
     // useEffect
     useEffect(()=> {
         async function loadArchivedGoals(){
@@ -44,6 +47,7 @@ export default function ArchivesPage(){
         loadArchivedGoals();
     },[]);
 
+    // loading state
     if (isLoading){
         return(
             <main className="flex min-h-screen items-center justify-center">
@@ -60,6 +64,7 @@ export default function ArchivesPage(){
         )
     }
 
+    //error state
     if(error){
         return(
             <main className="mx-auto min-h-screen max-w-7xl p-8">
@@ -80,6 +85,9 @@ export default function ArchivesPage(){
         }
 
         try{
+            // action run disabling
+            setProcessingGoalIdRestore(goalId);
+            
             // first confirms that database updated successfully
             await restoreGoal(goalId);
             // removes it from the archives page immediately
@@ -104,8 +112,10 @@ export default function ArchivesPage(){
         }
 
         try{
+            //action run disabling
+            setProcessingGoalIdDelete(goalId);
             // calls the deleteGoal API helper
-            await deleteGoal(goalId)
+            await deleteGoal(goalId);
 
             // refreshes the goals
             setArchivedGoals((currentGoals)=>
@@ -131,7 +141,7 @@ export default function ArchivesPage(){
 
             {archivedGoals.length === 0 ? (
                 // if theres no archived goals:
-                <section className="rounded-lg border border-neutral-800 bg-neutral-900 p-8 text-center">
+                <section className="mt-4 rounded-lg border border-neutral-800 bg-neutral-900 p-8 text-center">
                     <h2 className="text=xl font-semibold text-white">
                         No Archived Goals Yet
                     </h2>
@@ -157,16 +167,20 @@ export default function ArchivesPage(){
                                         <button
                                             type="button"
                                             onClick={() => handleRestoreGoal(goal.id)}
+                                            disabled={processingGoalIdRestore === goal.id}
                                             className="rounded bg-white px-2 py-2 font-medium text-black transition hover:bg-teal-200"
                                         >
-                                            Restore Goal
+                                            {/* // changes label in action run*/}
+                                            {processingGoalIdRestore === goal.id ? "Restoring..." : "Restore Goal"}
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => handleDeleteArchivedGoal(goal.id)}
-                                            className="rounded bg-white px-4 py-2 font-medium text-black transition hover:bg-teal-200"
+                                            disabled={processingGoalIdDelete === goal.id}
+                                            className="rounded bg-white px-3 py-2 font-medium text-black transition hover:bg-red-300"
                                         >
-                                            -
+                                            {/* // changes label in action run*/}
+                                            {processingGoalIdDelete === goal.id ? "Deleting Goal..." : "✖"}
                                         </button>
                                     </div>
                                 </div>
