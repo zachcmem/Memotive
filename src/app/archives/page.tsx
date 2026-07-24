@@ -315,6 +315,22 @@ export default function ArchivesPage(){
                         Goals you archive from the dashboard will appear here
                     </p>
                 </section>
+            ): visableArchivedGoals.length === 0 ? (
+                <section className="rounded-lg border border-neutral-800 bg-neutral-900 p-8 text-center">
+                    <h2 className="text-xl font-semibold text-white">
+                        No Matching Goals
+                    </h2>
+                    <p className="mt-2 text-neutral-400">
+                        Try changing or clearing your search.
+                    </p>
+                    <button
+                        type="button"
+                        onClick={() => setSearchQuery("")}
+                        className="mt-4  rounded bg-white px-4 py-2 font-medium text-black transition hover:bg-teal-200"
+                    >
+                        Clear Search
+                    </button>
+                </section>
             ):(
                 // if there are archived goals:
                     // map them
