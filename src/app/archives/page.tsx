@@ -30,9 +30,20 @@ export default function ArchivesPage(){
 
     const [processingGoalIdDelete, setProcessingGoalIdDelete] = useState<string | null>(null);
 
-    const [actionError, setActionError] = useState<string | null>(null);
-
     const [expandedGoalIds, setExpandedGoalIds] = useState<string[]>([]);
+
+    //use state for searching
+    const [searchQuery, setSearchQuery] = useState("");
+
+    // use state for sorting -> search options added
+    const [sortOption, setSortOption] = useState<
+        | "archived-newest"
+        | "archived-oldest"
+        | "title-asc"
+        | "title-desc"
+        | "progress-high"
+        | "progress-low"
+    >("archived-newest");
 
     // useEffect
     useEffect(()=> {
@@ -134,6 +145,8 @@ export default function ArchivesPage(){
         }
     }
 
+
+
     //helps handle toggling feature
     function handleToggleGoal(goalId: string){
         setExpandedGoalIds((currentIds) => 
@@ -142,6 +155,54 @@ export default function ArchivesPage(){
                 : [...currentIds, goalId]
         );
     }
+
+    const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+
+    const visableArchivedGoals = [...archivedGoals]
+        .filter((goal)=> {
+            if(!normalizedSearchQuery){
+                return true;
+            }
+
+        const titleMatches = goal.title
+            .toLowerCase()
+            .includes(normalizedSearchQuery);
+
+        const descriptionMatches = goal.description
+            ?.toLowerCase()
+            .includes(normalizedSearchQuery);
+
+        return titleMatches || descriptionMatches;
+    })
+    .sort((goalA, goalB)=> {
+        switch (sortOption) {
+            case "archived-oldest":
+                return(
+                    new Date(goalA.archivedAt ?? 0).getTime() -
+                    new Date(goalB.archivedAt ?? 0).getTime()
+                );
+            
+                case "title-asc":
+                    return goalA.title.localeCompare(goalB.title);
+
+                case "title-desc":
+                    return goalB.title.localeCompare(goalA.title);
+
+                case "progress-high":
+                    return goalB.progress - goalA.progress;
+
+                case "progress-low":
+                    return goalA.progress - goalB.progress;
+
+                    case "archived-newest":
+                        default:
+                            return (
+                                new Date(goalb.archivedAt ?? 0).getTime() -
+                                new Date(goalA.archivedAt ?? 0).getTime()
+                            )
+                
+        }
+    })
 
     return(
         <main className="mx-auto min-h-screen max-w-7xl p-8">
@@ -191,20 +252,20 @@ export default function ArchivesPage(){
                                     <h2 className="text-2xl font-semibold text-white">
                                     {goal.title}
                                     </h2>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-4">
                                         <button
                                             type="button"
                                             onClick={()=> handleToggleGoal(goal.id)}
                                             aria-expanded={isExpanded}
-                                            className="rounded bg-white px-3 py-2 font-medium text-black transition hover:bg-teal-200"
+                                            className="rounded bg-white px-2 py-0.5 font-medium text-black transition hover:bg-teal-200"
                                         >
-                                            {isExpanded ? "+" : "-"}
+                                            {isExpanded ? "-" : "+"}
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => handleDeleteArchivedGoal(goal.id)}
                                             disabled={processingGoalIdDelete === goal.id}
-                                            className="rounded bg-white px-3 py-2 font-medium text-black transition hover:bg-red-300"
+                                            className="rounded bg-white px-1.5 py-0.5 font-medium text-black transition hover:bg-red-300"
                                         >
                                             {/* // changes label in action run*/}
                                             {processingGoalIdDelete === goal.id ? "Deleting Goal..." : "✖"}
