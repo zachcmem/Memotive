@@ -168,11 +168,16 @@ export default function ArchivesPage(){
             .toLowerCase()
             .includes(normalizedSearchQuery);
 
+
         const descriptionMatches = goal.description
             ?.toLowerCase()
             .includes(normalizedSearchQuery);
 
-        return titleMatches || descriptionMatches;
+        const taskMatches = goal.tasks.some((task) => 
+            task.title.toLowerCase().includes(normalizedSearchQuery)
+        );
+
+        return titleMatches || descriptionMatches || taskMatches;
     })
     .sort((goalA, goalB)=> {
         switch (sortOption) {
