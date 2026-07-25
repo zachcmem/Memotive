@@ -15,6 +15,7 @@ import {
 } from "@/lib/api";
 import ProgressBar from "../components/ProgressBar";
 import type { ArchivedGoal, } from "@/types";
+import ArchiveToolBar from "../components/archives/ArchiveToolBar";
 
 
 export default function ArchivesPage(){
@@ -231,7 +232,14 @@ export default function ArchivesPage(){
             </div>
 
             {/* searching and sorting*/}
-
+            <ArchiveToolBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                sortOption={sortOption}
+                setSortOption={setSortOption}
+                visibleCount={visableArchivedGoals.length}
+                totalCount={archivedGoals.length}
+            />
             <section className="mt-4 mb-4 rounded-lg border border-neutral-800 bg-neutral-900 p-4">
                 <div className="flex flex-col gap-4 sm:flex-row">
                     <div className="flex-1">
