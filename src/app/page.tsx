@@ -410,7 +410,13 @@ export default function Home() {
   //    goal.id = this goal's menu is open
   const [openGoalMenuId, setOpenGoalMenuId] = useState<string | null>(null);
 
-  
+  function handleReorderTasks(
+    goal: string,
+    activateTaskId: string,
+    overTaskId: string,
+  ){
+    setGoals((current))
+  }
 
   if(loading){
     return(

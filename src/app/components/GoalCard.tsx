@@ -62,6 +62,11 @@ type GoalCardProps = {
     onMoveDown: (goalId:string)=> void;
     onMoveToBottom: (goalId:string)=> void;
     handleArchiveGoal: (goalId:string)=> Promise<void>;
+    handleReorderTasks: (
+        goalId: string,
+        activeTaskId: string,
+        overTaskId: string
+    )=> void;
 };
 
 
@@ -84,6 +89,7 @@ export default function GoalCard({
     onMoveDown,
     onMoveToBottom,
     handleArchiveGoal,
+    handleReorderTasks
 }: GoalCardProps){
 
     //useStates for editing
@@ -259,7 +265,9 @@ export default function GoalCard({
                 <>
                 
                     <TaskList
+                        goalId={goal.id}
                         tasks={goal.tasks ?? []} 
+                        onReorderTasks={handleReorderTasks}
                         handleToggleTask={handleToggleTask}
                         handleDeleteTask={handleDeleteTask}
                         editingTaskId={editingTaskId}

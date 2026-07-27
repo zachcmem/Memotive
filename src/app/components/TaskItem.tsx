@@ -44,6 +44,9 @@ export default function TaskItem({
     const [editedTaskTitle, setEditedTaskTitle] = useState(task.title);
     console.log("TaskItem isGoalEditing:", isGoalEditing);
     return(
+        <div className="flex items-center justify-between rounded bg-neutral-800 py-3 pl-12 pr-3">
+
+        
         <li>
            
             {isTaskEditing ? (
@@ -122,6 +125,7 @@ export default function TaskItem({
             </>
             )}
         </li>
+        </div>
     );
     
 }
