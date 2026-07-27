@@ -17,7 +17,6 @@ export default function ArchiveGoalList({
     onToggleGoal,
     onRestoreGoal,
     onDeleteGoal,
-    isProcessing
 }:ArchivedGoalListProps){
     return(
   

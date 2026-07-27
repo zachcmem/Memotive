@@ -20,6 +20,13 @@ export type ArchivedGoal = Goal & {
   archivedAt: string | null;
 };
 
+export type ArchivedTask = {
+  id: string;
+  title: string;
+  completed: boolean;
+  goalId: string;
+}
+
 export type SortOption = 
   | "archived-newest"
   | "archived-oldest"

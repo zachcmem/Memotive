@@ -1,6 +1,7 @@
 
-import { ArchivedGoal } from "@/types";
+
 import ProgressBar from "../ProgressBar";
+import ArchivedTaskList from "./ArchivedTaskList";
 import type { ArchivedGoal } from "@/types";
 
 type ArchiveGoalCardProps = {
@@ -24,126 +25,87 @@ export default function ArchiveGoalCard({
         (task) => task.completed
     ).length;
 
-    return(
-        <>
-        </>
-        const isExpanded = expandedGoalIds.includes(goal.id);
-                
-                return(
-                    <article
-                        key={goal.id}
-                        className="rounded-lg mt-4 border border-teal-200 bg-neutral-900 p-6 shadow"
+    return (
+        <article className="rounded-lg border border-neutral-700 bg-neutral-900 p-6 shadow">
+        
+            {/* Always-visible header */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                    <h2 className="break-words text-2xl font-semibold text-white">
+                        {goal.title}
+                    </h2>
+                </div>
+                <div className="flex shrink-0 flex-wrap items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={onToggle}
+                        aria-expanded={isExpanded}
+                        aria-controls={`archived-goal-details-${goal.id}`}
+                        className="rounded bg-white px-3 py-2 font-medium text-black transition hover:bg-teal-200"
                     >
-                        {/* always visable */}
-                        <div className=" mb-3 flex items-center justify-between gap-3">
-                            <h2 className="text-2xl font-semibold text-white">
-                            {goal.title}
-                            </h2>
-                            <div className="flex items-center gap-4">
-                                <button
-                                    type="button"
-                                    onClick={()=> onToggleGoal(goal.id)}
-                                    aria-expanded={isExpanded}
-                                    className="rounded bg-white px-2 py-0.5 font-medium text-black transition hover:bg-teal-200"
-                                >
-                                    {isExpanded ? "-" : "+"}
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => onDeleteGoal(goal.id)}
-                                    disabled={processingGoalIdDelete === goal.id}
-                                    className="rounded bg-white px-1.5 py-0.5 font-medium text-black transition hover:bg-red-300"
-                                >
-                                    {/* // changes label in action run*/}
-                                    {processingGoalIdDelete === goal.id ? "Deleting Goal..." : "✖"}
-                                </button>
-                            </div>
-                        </div>
+                        {isExpanded ? "Collapse" : "Expand"}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onRestore}
+                        disabled={isProcessing}
+                        className="rounded bg-white px-3 py-2 font-medium text-black transition hover:bg-teal-200 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        {isProcessing ? "Processing..." : "Restore Goal"}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onDelete}
+                        disabled={isProcessing}
+                        aria-label={`Permanently delete ${goal.title}`}
+                        title="Permanently delete goal"
+                        className="rounded border border-red-400 px-3 py-2 font-medium text-red-300 transition hover:bg-red-400 hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
 
-                        {isExpanded && (    
-                            <div className="mt-3">    
-                                {/* if theres a goal description */}
-                                {goal.description && (
-                                    <p className="mt-2 text-neutral-300">
-                                        {goal.description}
-                                    </p>
-                                )}
-                                
-                                {/* progress bar component*/}
-                                <ProgressBar progress={goal.progress}/>
+            {/* Expandable content */}
+            {isExpanded && (
+                <div
+                id={`archived-goal-details-${goal.id}`}
+                className="mt-5"
+                >
+                    {goal.description && (
+                        <p className="mb-4 text-neutral-300">
+                            {goal.description}
+                        </p>
+                    )}
 
-                                <div className="mt-5">
-                                    <h3 className="mb-1 font-bold font-medium  text-white">
-                                        Tasks
-                                    </h3>
+                    <ProgressBar progress={goal.progress} />
 
-                                    { goal.tasks.length === 0 ? (
-                                        // if theres tasks for this goal
-                                        <p className="text-sm text-neutral-500">
-                                            This goal has no tasks
-                                        </p>
-                                    ) : (
-                                        // if there are tasks for this goal, list them
-                                        // tasks summary
-                                        <>
-                                            <p className="mb-2 text-sm text-neutral-400">
-                                                {goal.tasks.filter((task)=> task.completed).length} of{" "}
-                                                {goal.tasks.length} tasks completed
-                                            </p>
-                                        
-                                            <ul className="space-y-2">
-                                                {goal.tasks.map((task)=>(
-                                                    <li
-                                                        key={task.id}
-                                                        className="flex items-center gap-3 rounded bg-neutral-800 px-4 py-3"
-                                                    >
-                                                    <span
-                                                        className={`h-3 w-3 rounded-full ${
-                                                            task.completed
-                                                                ? "bg-teal-200"
-                                                                : "bg-neutral-500"
-                                                        }`}
-                                                    />
-                                                    <span
-                                                        className={
-                                                            task.completed
-                                                                ? "text-neutral-400 line-through"
-                                                                : "text-neutral-200"
-                                                        }
-                                                    >
-                                                        {task.title}
-                                                    </span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </>
-                                    )}
-                                </div>
-                            
-                            </div>
-                        )}
-                        
-                            
-                        {/* archived goal information */}
-                        {goal.archivedAt &&(
-                            <p className="mt-5 text-sm text-neutral-500">
-                                Archived on{" "}
-                                {new Date(goal.archivedAt).toLocaleDateString(undefined, {
-                                    month: "long",
-                                    day: "numeric",
-                                    year: "numeric",
-                                })}
-                            </p>
-                        )} 
-                        <button
-                            type="button"
-                            onClick={()=> handleRestoreGoal(goal.id)}
-                            className="text-sm text-teal-300 hover:text-teal-200 hover:underline"
-                            disabled={processingGoalIdRestore === goal.id}
-                        >   
-                            {processingGoalIdRestore === goal.id ? "Restoring..." : "Restore Goal"}
-                        </button>    
-                    </article>
-                )
-    );
+                    <p className="mt-3 text-sm text-neutral-400">
+                        {completedTaskCount} of {goal.tasks.length} tasks completed
+                    </p>
+
+                    <div className="mt-5">
+                        <h3 className="mb-2 font-medium text-white">
+                            Tasks
+                        </h3>
+                        <ArchivedTaskList 
+                            tasks={goal.tasks} 
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Always-visible footer */}
+            {goal.archivedAt && (
+                <p className="mt-5 border-t border-neutral-800 pt-4 text-sm text-neutral-500">
+                    Archived on{" "}
+                    {new Date(goal.archivedAt).toLocaleDateString(undefined, {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                    })}
+                </p>
+            )}
+        </article>
+  );
 }
