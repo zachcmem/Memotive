@@ -3,6 +3,7 @@ export type Task = {
   title: string;
   completed: boolean;
   goalId: string;
+  order: number;
 };
 
 export type Goal = {

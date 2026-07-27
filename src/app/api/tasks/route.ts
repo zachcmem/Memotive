@@ -26,9 +26,10 @@ export async function POST(request: Request){
     try{
         // asynconously parse incoming HTTP requests body as JSON
         const body = await request.json();
+        const {title, goalId} = body;
 
         // error handling if no title, not string, or blank
-        if (!body.title || typeof body.title !== "string" || body.title.trim() === ""){
+        if (!title || typeof title !== "string" || title.trim() === ""){
             return NextResponse.json(
                 {error: "Task title is required"},
                 {status: 400}
@@ -36,22 +37,34 @@ export async function POST(request: Request){
         }
 
         // error handing if no goalID or goalID isnt string
-        if(!body.goalId || typeof body.goalId !== "string"){
+        if(!goalId || typeof goalId !== "string"){
             return NextResponse.json(
                 {error: "Goal Id is Required"},
                 {status: 400}
             );
         }
 
+        const lastTask = await prisma.task.findFirst({
+            where: {
+                goalId,
+            },
+            orderBy: {
+                order: "desc",
+            },
+        });
+
+        const nextOrder = lastTask ? lastTask.order + 1 : 0;
+
         // creeates the data from JSON into a task variable
-        const task = await prisma.task.create({
+        const newTask = await prisma.task.create({
             data:{
                 title: body.title.trim(),
                 goalId: body.goalId,
+                order: nextOrder,
             }
         })
 
-        return NextResponse.json(task, {status: 201});   
+        return NextResponse.json(newTask, {status: 201});   
     }
     catch (error) {
         console.error("Failed to create task:", error);
