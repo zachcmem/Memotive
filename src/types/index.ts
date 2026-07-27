@@ -19,3 +19,11 @@ export type ArchivedGoal = Goal & {
   archived: boolean;
   archivedAt: string | null;
 };
+
+export type SortOption = 
+  | "archived-newest"
+  | "archived-oldest"
+  | "title-asc"
+  | "title-desc"
+  | "progress-high"
+  | "progress-low";
