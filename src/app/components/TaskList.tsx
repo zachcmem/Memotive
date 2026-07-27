@@ -19,16 +19,11 @@ import {
 } from "@dnd-kit/sortable";
 
 import SortableTaskItem from "./SortableTaskItem";
+import type { Task } from "@/types";
 
 // type delcarations
 
-type Task = {
-    id: string,
-    title: string,
-    completed: boolean,
-    goalId: string,
-    order: number,
-}
+
 
 type TaskListProps = {
     // must pass in the list of tasks per goal
@@ -139,12 +134,13 @@ export default function TaskList({
                                 >
                                     <TaskItem
                                         task={task}
-                                        isEditing={editingTaskId === task.id}
-                                        onEdit={()=> onEditTask(task.id)}
-                                        onCancelEdit={onCancelEditTask}
+                                        isTaskEditing={editingTaskId === task.id}
+                                        onEdit={()=> setEditingTaskId(task.id)}
+                                        onCancelEdit={()=>setEditingTaskId(null)}
                                         handleToggleTask={handleToggleTask}
                                         handleDeleteTask={handleDeleteTask}
                                         handleUpdateTask={handleUpdateTask}
+                                        isGoalEditing={isGoalEditing}
                                     />
                                 </SortableTaskItem>
                             ))}

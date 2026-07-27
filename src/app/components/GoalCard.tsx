@@ -17,19 +17,11 @@ import GoalReorderMenu from "./GoalReorderMenu";
 import { useSortable} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
+import type { Task } from "@/types";
+import type { Goal } from "@/types";
+
 //type delcaration, including props 
-type Task = {
-  id: string
-  title: string
-  completed: boolean
-};
-type Goal = {
-  id: string;
-  title: string;
-  description?: string | null;
-  progress: number;
-  tasks: Task[]
-};
+
 
 // Read-only objects used to pass data from a parent 
 // component down to a child component

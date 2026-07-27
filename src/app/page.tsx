@@ -30,23 +30,9 @@ import {
   arrayMove
 } from "@dnd-kit/sortable";
 
+import type { Goal } from "@/types";
+import type { Task } from "@/types";
 
-
-// Tells TypeScript about the SHAPE OF DATA
-//    Later when we map the goals to the dash, type knows what goals contain
-// Task should have an id, title, and boolean
-type Task = {
-  id: string
-  title: string
-  completed: boolean
-}
-type Goal = {
-  id: string;
-  title: string;
-  description?: string | null;
-  progress: number;
-  tasks: Task[]
-}
 
 // turned into async function for await promise
 export default function Home() {
@@ -411,12 +397,40 @@ export default function Home() {
   const [openGoalMenuId, setOpenGoalMenuId] = useState<string | null>(null);
 
   function handleReorderTasks(
-    goal: string,
-    activateTaskId: string,
+    goalId: string,
+    activeTaskId: string,
     overTaskId: string,
   ){
-    setGoals((current))
+    setGoals((currentGoals) => 
+      currentGoals.map((goal)=> {
+        if(goal.id !== goalId){
+          return goal;
+        }
+        const oldIndex = goal.tasks.findIndex(
+          (task)=> task.id === activeTaskId
+        );
+        const newIndex = goal.tasks.findIndex(
+          (task)=> task.id === overTaskId
+        );
+        if(oldIndex === -1 || newIndex === -1){
+          return goal;
+        }
+        const reorderedTasks = arrayMove(
+          goal.tasks,
+          oldIndex,
+          newIndex
+        );
+
+        return{
+          ...goal,
+          tasks: reorderedTasks,
+        };
+
+      })
+    );
   }
+
+
 
   if(loading){
     return(
@@ -486,6 +500,7 @@ export default function Home() {
               onMoveDown={moveGoalDown}
               onMoveToBottom={moveGoalToBottom}
               handleArchiveGoal={handleArchiveGoal}
+              handleReorderTasks={handleReorderTasks}
             />
           ))} 
         </SortableContext>
