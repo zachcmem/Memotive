@@ -6,6 +6,8 @@ import ArchiveGoalCard from "./ArchiveGoalCard"
 type ArchivedGoalListProps = {
     goals: ArchivedGoal[];
     expandedGoalIds: string[];
+    processingGoalIdRestore: string | null;
+    processingGoalIdDelete: string | null;
     onToggleGoal: (goalId: string) => void;
     onRestoreGoal: (goalId: string) => void;
     onDeleteGoal: (goalId: string) => void;
@@ -14,13 +16,15 @@ type ArchivedGoalListProps = {
 export default function ArchiveGoalList({
     goals,
     expandedGoalIds,
+    processingGoalIdRestore,
+    processingGoalIdDelete,
     onToggleGoal,
     onRestoreGoal,
     onDeleteGoal,
 }:ArchivedGoalListProps){
     return(
   
-        <section className="space-y-6">
+        <section className="w-full space-y-6">
             {goals.map((goal)=> (
                 <ArchiveGoalCard
                     key = {goal.id}
@@ -29,6 +33,8 @@ export default function ArchiveGoalList({
                     onToggle={()=> onToggleGoal(goal.id)}
                     onRestore={()=> onRestoreGoal(goal.id)}
                     onDelete={()=> onDeleteGoal(goal.id)}
+                    isRestoring={processingGoalIdRestore === goal.id}
+                    isDeleting={processingGoalIdDelete === goal.id}
                 />
             ))}
         </section>

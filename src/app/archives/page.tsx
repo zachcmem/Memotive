@@ -216,7 +216,7 @@ export default function ArchivesPage(){
     });
 
     return(
-        <main className="mx-auto min-h-screen max-w-7xl p-8">
+        <main className="mx-auto min-h-screen w-full max-w-[1600px] px-4 py-8 sm:px-6 lg:px-10">
 
             {/* Header and metadata */}
             <div className="rounded-lg border border-teal-200 bg-neutral-900 p-6 shadow">
@@ -280,6 +280,8 @@ export default function ArchivesPage(){
                      <ArchiveGoalList
                         goals={visableArchivedGoals}
                         expandedGoalIds={expandedGoalIds}
+                        processingGoalIdRestore={processingGoalIdRestore}
+                        processingGoalIdDelete={processingGoalIdDelete}
                         onToggleGoal={handleToggleGoal}
                         onRestoreGoal={handleRestoreGoal}
                         onDeleteGoal={handleDeleteArchivedGoal}
