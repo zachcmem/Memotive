@@ -39,7 +39,11 @@ export async function PATCH(
                 order: lastActiveGoal ? lastActiveGoal.order + 1 : 0,
             },
             include: {
-                tasks: true,
+                tasks: {
+                    orderBy: {
+                        order: "asc",
+                    },
+                },
             },
         });
 

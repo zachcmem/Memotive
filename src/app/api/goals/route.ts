@@ -130,7 +130,11 @@ export async function POST(request: Request){
                 description: body.description || null,
             },
             include: {
-                tasks: true,
+                tasks: {
+                    orderBy: {
+                    order: "asc",
+                    },
+                },
             },
         });
         

@@ -28,5 +28,6 @@ model Task {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   goalId    String
+  order     Int @default(0)
   goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
 }

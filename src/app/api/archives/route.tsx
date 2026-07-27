@@ -11,8 +11,12 @@ export async function GET(){
                 archived: true
             },
             include:{
-                tasks: true
-            },
+                tasks: {
+                    orderBy: {
+                        order: "asc",
+                    }
+                }
+            },         
             orderBy: {
                 archivedAt: "desc"
             }

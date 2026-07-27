@@ -24,7 +24,11 @@ export async function PATCH(
                 archivedAt: new Date(),
             },
             include: {
-                tasks: true
+                tasks: {
+                    orderBy: {
+                        order: "asc",
+                    },
+                },
             },
         });
 
