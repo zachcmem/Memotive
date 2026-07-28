@@ -4,6 +4,7 @@ import {useEffect, useState } from "react"
 import GoalCard from "./components/GoalCard";
 import AddGoalForm from "./components/AddGoalForm";
 
+
 import{
   createGoal,
   deleteGoal,
@@ -13,6 +14,7 @@ import{
   updateGoal,
   updateTask,
   archiveGoal,
+  reorderTasks
 } from "@/lib/api";
 
 import { calculateProgress } from "@/lib/progress";

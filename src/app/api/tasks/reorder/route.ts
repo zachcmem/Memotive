@@ -3,7 +3,12 @@ import {prisma} from "@/lib/prisma";
 export async function PATCH(request: Request){
     try{
         const body = await request.json();
+
+        // the server uses goalId to verify every submitted task
+        // belongs to the same goal
         const {goalId, taskIds} = body;
+
+
 
         // if there is no goalId or goalId isnt string
         if(!goalId || typeof goalId !== "string"){
@@ -24,6 +29,22 @@ export async function PATCH(request: Request){
             return Response.json(
                 {error: "Every task ID must be a string"},
                 {status: 400}
+            );
+        }
+
+         // edge case
+        const goalTaskCount = await prisma.task.count({
+            where: {
+                goalId,
+            },
+        });
+
+        if (goalTaskCount !== taskIds.length) {
+            return Response.json(
+                {
+                error: "The reordered list must include every task in the goal",
+                },
+                { status: 400 }
             );
         }
 
@@ -57,6 +78,8 @@ export async function PATCH(request: Request){
             );
         }
 
+       
+        
         await prisma.$transaction(
             taskIds.map((taskId, index)=>
                 prisma.task.update({

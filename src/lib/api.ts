@@ -1,6 +1,8 @@
 // FRONTEND API client 
 // helps keep page.component files from becoming crowded
 
+import type { Task } from "@/types";
+
 export async function createGoal(title: string, description: string){
     const response = await fetch("/api/goals", {
         method: "POST",
@@ -155,4 +157,27 @@ export async function restoreGoal(goalId: string){
         throw new Error("Failed to restore goal");
     }
     return response.json()
+}
+export async function reorderTasks(
+    goalId: string,
+    taskIds: string[]
+): Promise<Task[]>{
+    const response = await fetch("/api/tasks/reorder", {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            goalId,
+            taskIds,
+        }),
+    });
+
+    if (!response.ok){
+        const errorData = await response.json().catch(()=> null);
+        throw new Error(
+            errorData?.error || "Failed to reorder tasks"
+        );
+    }
+    return response.json();
 }
