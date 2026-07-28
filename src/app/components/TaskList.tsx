@@ -62,15 +62,8 @@ export default function TaskList({
     onReorderTasks,
 }: TaskListProps){
     console.log("TaskList isGoalEditing:", isGoalEditing);
+    console.log("Tasks received by TaskList:", tasks);
     
-    // no tasks in goal state
-    if(tasks.length === 0){
-        return(
-            <p className="my-3 rounded-md border border-dashed border-teal-200 px-3 py-2 text-sm text-slate-400">
-                No tasks yet- add your first task to start making progress
-            </p>
-        );
-    }
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -95,11 +88,20 @@ export default function TaskList({
             String(over.id)
         );
     }
+
+    // no tasks in goal state
+    if(tasks.length === 0){
+        return(
+            <p className="my-3 rounded-md border border-dashed border-teal-200 px-3 py-2 text-sm text-slate-400">
+                No tasks yet- add your first task to start making progress
+            </p>
+        );
+    }
     
     return(
         <>
-            <h3 className="mb-2 text-1xl font-bold">Tasks:</h3>
-            <ul>
+            <h3 className="mb-2 text-xl font-bold">Tasks:</h3>
+            {/* <ul> */}
                 {/* only tasked are passed in, instead of goal
                 {tasks.map((task) => (
                     <TaskItem
@@ -116,38 +118,38 @@ export default function TaskList({
                        
                     />
                 ))} */}
-                <DndContext
-                    sensors={sensors}
-                    onDragEnd={handleTaskDragEnd}
+            <DndContext
+                sensors={sensors}
+                onDragEnd={handleTaskDragEnd}
+            >
+                <SortableContext
+                    // gives dnd-kit the task order crrentlt shown on screen
+                    items={tasks.map((task)=>task.id)}
+                    strategy={verticalListSortingStrategy}
                 >
-                    <SortableContext
-                        // gives dnd-kit the task order crrentlt shown on screen
-                        items={tasks.map((task)=>task.id)}
-                        strategy={verticalListSortingStrategy}
-                    >
-                        <div className="space-y-3">
-                            {tasks.map((task)=> (
-                                <SortableTaskItem
-                                    key={task.id}
-                                    taskId={task.id}
-                                    disabled={isGoalEditing}
-                                >
-                                    <TaskItem
-                                        task={task}
-                                        isTaskEditing={editingTaskId === task.id}
-                                        onEdit={()=> setEditingTaskId(task.id)}
-                                        onCancelEdit={()=>setEditingTaskId(null)}
-                                        handleToggleTask={handleToggleTask}
-                                        handleDeleteTask={handleDeleteTask}
-                                        handleUpdateTask={handleUpdateTask}
-                                        isGoalEditing={isGoalEditing}
-                                    />
-                                </SortableTaskItem>
-                            ))}
-                        </div>
-                    </SortableContext>
-                </DndContext>
-            </ul>
+                    <div className="space-y-3">
+                        {tasks.map((task)=> (
+                            <SortableTaskItem
+                                key={task.id}
+                                taskId={task.id}
+                                disabled={isGoalEditing}
+                            >
+                                <TaskItem
+                                    task={task}
+                                    isTaskEditing={editingTaskId === task.id}
+                                    onEdit={()=> setEditingTaskId(task.id)}
+                                    onCancelEdit={()=>setEditingTaskId(null)}
+                                    handleToggleTask={handleToggleTask}
+                                    handleDeleteTask={handleDeleteTask}
+                                    handleUpdateTask={handleUpdateTask}
+                                    isGoalEditing={isGoalEditing}
+                                />
+                            </SortableTaskItem>
+                        ))}
+                    </div>
+                </SortableContext>
+            </DndContext>
+            {/* </ul> */}
         </>
         
     );

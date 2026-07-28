@@ -15,7 +15,7 @@ type SortableTaskItemProps = {
     children: React.ReactNode;
 };
 
-export default function SOrtableTaskItem({
+export default function SortableTaskItem({
     taskId,
     disabled = false,
     children,
@@ -47,6 +47,8 @@ export default function SOrtableTaskItem({
                 isDragging ? "z-20 opacity-60" : ""
             }`}
         >
+            
+            {children}
             <button
                 type="button"
                 {...attributes}
