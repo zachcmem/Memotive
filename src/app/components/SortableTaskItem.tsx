@@ -55,14 +55,14 @@ export default function SortableTaskItem({
                 {...listeners}
                 disabled={disabled}
                 aria-label="Reorder task"
-                className={`absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded px-2 py-1 text-sm transition ${
+                className={`absolute right-5 top-1/2 z-10 -translate-y-1/2 rounded px-2 py-1 text-sm transition ${
                     disabled
                         ? "cursor-not-allowed bg-neutral-700 text-neutral-500"
                         : "cursor-grab bg-white text-black hover:bg-teal-200 active:cursor-grabbing"
                     }`}
 
             >
-                ↕
+                ☰
             </button>
         </div>      
     );
