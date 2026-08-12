@@ -44,10 +44,10 @@ export default function TaskItem({
     const [editedTaskTitle, setEditedTaskTitle] = useState(task.title);
     console.log("TaskItem isGoalEditing:", isGoalEditing);
     return(
-        <div className="flex items-center justify-between rounded bg-neutral-800 py-3 pl-12 pr-3">
+        <div className="flex items-center justify-between rounded bg-neutral-800 py-3 pl-3 pr-12">
 
+        <div>
         
-        <li>
            
             {isTaskEditing ? (
                 <>
@@ -64,7 +64,7 @@ export default function TaskItem({
                             await handleUpdateTask(task.id, editedTaskTitle);
                             onCancelEdit();
                         }}
-                        className="rounded bg-teal-200 px-2 py-1 text-sm font-medium text-black hover bg-teal-300"
+                        className="rounded bg-teal-200 px-1 py-1 text-sm font-medium text-black hover bg-teal-300"
                     >
                         Save
                     </button>
@@ -84,7 +84,7 @@ export default function TaskItem({
             ):(
                 <>
                 <button 
-                    className={`mb-2 rounded px-4 py-2 font-medium text-black hover:bg-teal-200 transition ${
+                    className={` rounded px-4 py-2 font-medium text-black hover:bg-teal-200 transition ${
                         task.completed
                             ? "bg-teal-200"
                             : "bg-white hover:bg-teal-200"
@@ -124,7 +124,7 @@ export default function TaskItem({
                 )}
             </>
             )}
-        </li>
+        </div>
         </div>
     );
     
