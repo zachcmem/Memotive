@@ -6,6 +6,7 @@
 import TaskItem from "./TaskItem";
 
 import {
+  closestCenter,
   DndContext,
   DragEndEvent,
   PointerSensor,
@@ -76,12 +77,21 @@ export default function TaskList({
     //drag-end handler
     function handleTaskDragEnd(event: DragEndEvent){
         const {active, over} = event;
-        if(!over){
+
+        //debug for task reordering not saving to db
+        console.log(
+        "Tasks received by TaskList:",
+        tasks.map((task) => ({
+            title: task.title,
+            id: task.id,
+            order: task.order,
+        }))
+        );
+
+        if (!over || active.id === over.id) {
             return;
         }
-        if(active.id === over.id){
-            return;
-        }
+
         onReorderTasks(
             goalId,
             String(active.id),
@@ -121,6 +131,7 @@ export default function TaskList({
             <DndContext
                 sensors={sensors}
                 onDragEnd={handleTaskDragEnd}
+                collisionDetection={closestCenter}
             >
                 <SortableContext
                     // gives dnd-kit the task order crrentlt shown on screen

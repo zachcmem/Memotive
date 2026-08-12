@@ -21,13 +21,18 @@ export async function GET(){
             where: {
                 archived: false,
             },
-            orderBy:{ 
-                order: "asc"
-            },
-            include: {
-                tasks: true,
-            },
             
+            include: {
+                tasks: {
+                    orderBy:{
+                        order: "asc",
+                    },
+                },
+            },
+
+            orderBy:{
+                order: "asc",
+            },
         });
 
         // this finally adds the progress to last variable

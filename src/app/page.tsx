@@ -398,41 +398,177 @@ export default function Home() {
   //    goal.id = this goal's menu is open
   const [openGoalMenuId, setOpenGoalMenuId] = useState<string | null>(null);
 
-  function handleReorderTasks(
+  // async function handleReorderTasks(
+  //   goalId: string,
+  //   activeTaskId: string,
+  //   overTaskId: string
+  // ) {
+  //   const targetGoal = goals.find(
+  //     (goal) => goal.id === goalId
+  //   );
+
+  //   if (!targetGoal) {
+  //     return;
+  //   }
+
+  //   const oldIndex = targetGoal.tasks.findIndex(
+  //     (task) => task.id === activeTaskId
+  //   );
+
+  //   const newIndex = targetGoal.tasks.findIndex(
+  //     (task) => task.id === overTaskId
+  //   );
+
+  //   console.log("Task reorder indexes:", {
+  //     oldIndex,
+  //     newIndex,
+  //     activeTaskId,
+  //     overTaskId,
+  //   });
+
+  //   if (oldIndex === -1 || newIndex === -1) {
+  //     return;
+  //   }
+
+  //   const previousTasks = targetGoal.tasks;
+
+  //   const reorderedTasks = arrayMove(
+  //     targetGoal.tasks,
+  //     oldIndex,
+  //     newIndex
+  //   );
+
+  //   const reorderedTaskIds = reorderedTasks.map(
+  //     (task) => task.id
+  //   );
+
+  //   console.log("Sending task order:", reorderedTaskIds);
+
+  //   setGoals((currentGoals) =>
+  //     currentGoals.map((goal) =>
+  //       goal.id === goalId
+  //         ? {
+  //             ...goal,
+  //             tasks: reorderedTasks,
+  //           }
+  //         : goal
+  //     )
+  //   );
+
+  //   try {
+  //     const savedTasks = await reorderTasks(
+  //       goalId,
+  //       reorderedTaskIds
+  //     );
+
+  //     console.log(
+  //       "Saved database order:",
+  //       savedTasks.map((task) => ({
+  //         id: task.id,
+  //         order: task.order,
+  //       }))
+  //     );
+  //   } catch (error) {
+  //     console.error("Failed to reorder tasks:", error);
+
+  //     setGoals((currentGoals) =>
+  //       currentGoals.map((goal) =>
+  //         goal.id === goalId
+  //           ? {
+  //               ...goal,
+  //               tasks: previousTasks,
+  //             }
+  //           : goal
+  //       )
+  //     );
+  //   }
+  // }
+
+  async function handleReorderTasks(
     goalId: string,
     activeTaskId: string,
-    overTaskId: string,
-  ){
-    setGoals((currentGoals) => 
-      currentGoals.map((goal)=> {
-        if(goal.id !== goalId){
-          return goal;
-        }
-        const oldIndex = goal.tasks.findIndex(
-          (task)=> task.id === activeTaskId
-        );
-        const newIndex = goal.tasks.findIndex(
-          (task)=> task.id === overTaskId
-        );
-        if(oldIndex === -1 || newIndex === -1){
-          return goal;
-        }
-        const reorderedTasks = arrayMove(
-          goal.tasks,
-          oldIndex,
-          newIndex
-        );
-
-        return{
-          ...goal,
-          tasks: reorderedTasks,
-        };
-
-      })
+    overTaskId: string
+  ) {
+    const targetGoal = goals.find(
+      (goal) => goal.id === goalId
     );
+
+    if (!targetGoal) {
+      return;
+    }
+
+    const oldIndex = targetGoal.tasks.findIndex(
+      (task) => task.id === activeTaskId
+    );
+
+    const newIndex = targetGoal.tasks.findIndex(
+      (task) => task.id === overTaskId
+    );
+
+    console.log("Task reorder indexes:", {
+      oldIndex,
+      newIndex,
+      activeTaskId,
+      overTaskId,
+    });
+
+    if (oldIndex === -1 || newIndex === -1) {
+      return;
+    }
+
+    const previousTasks = targetGoal.tasks;
+
+    const reorderedTasks = arrayMove(
+      targetGoal.tasks,
+      oldIndex,
+      newIndex
+    );
+
+    const reorderedTaskIds = reorderedTasks.map(
+      (task) => task.id
+    );
+
+    console.log("Sending task order:", reorderedTaskIds);
+
+    setGoals((currentGoals) =>
+      currentGoals.map((goal) =>
+        goal.id === goalId
+          ? {
+              ...goal,
+              tasks: reorderedTasks,
+            }
+          : goal
+      )
+    );
+
+    try {
+      const savedTasks = await reorderTasks(
+        goalId,
+        reorderedTaskIds
+      );
+
+      console.log(
+        "Saved database order:",
+        savedTasks.map((task) => ({
+          id: task.id,
+          order: task.order,
+        }))
+      );
+    } catch (error) {
+      console.error("Failed to reorder tasks:", error);
+
+      setGoals((currentGoals) =>
+        currentGoals.map((goal) =>
+          goal.id === goalId
+            ? {
+                ...goal,
+                tasks: previousTasks,
+              }
+            : goal
+        )
+      );
+    }
   }
-
-
 
   if(loading){
     return(

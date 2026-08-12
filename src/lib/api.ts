@@ -162,6 +162,10 @@ export async function reorderTasks(
     goalId: string,
     taskIds: string[]
 ): Promise<Task[]>{
+    console.log("Sending reorder request:", {
+    goalId,
+    taskIds,
+  });
     const response = await fetch("/api/tasks/reorder", {
         method: "PATCH",
         headers: {
