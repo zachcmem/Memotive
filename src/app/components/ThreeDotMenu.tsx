@@ -46,7 +46,7 @@ export default function ThreeDotMenu({
     }, [isOpen, setOpenMenuId]);
 
     return(
-        <div ref={menuRef} className="absolute right-4 top-4">
+        <div ref={menuRef} className="relative">
             {/* MENU OPTION BUTTON */}
             <button
             type="button"
@@ -60,7 +60,7 @@ export default function ThreeDotMenu({
             </button>
             
             {openMenuId === itemId && (
-            <div className="absolute right-0 top-8 z-20 w-32 mt-2 rounded-lg border border-teal-200 bg-slate-800 p-2 shadow-lg">
+            <div className="absolute right-0 top-8 z-20 w-32 mt-2 rounded-lg border border-teal-200 bg-neutral-800 p-2">
                 <button
                 type="button"
                 onClick={()=> {

@@ -157,67 +157,73 @@ export default function GoalCard({
         <section
             ref={setNodeRef}
             style={style}
-
             className={`relative rounded-lg border p-6 shadow transition ${
-                isDragging
-                    ? "opacity-50"
-                    : ""
-            }${
+                isDragging ? "opacity-50" : ""
+            } ${
                 isEditing
-                ? "bg-neutral-850 border-teal-300 ring-2 ring-teal-200"
-                : "bg-neutral-900 border-teal-200"
+                    ? "bg-neutral-850 border-teal-300 ring-2 ring-teal-200"
+                    : "bg-neutral-900 border-teal-200"
             }`}
         >
-            
-            <button
-                type="button"
-                onClick={()=> setIsCollapsed((current)=> !current)}
-                className="text-sm text-teal-300 hover:text-teal-200"
-            >
-                {isCollapsed ? "Show tasks" : "Hide tasks"}
-            </button>
+            {/* TOP-RIGHT CONTROLS */}
+            <div className="absolute right-4 top-4 flex items-center gap-2">
 
+                {/* Expand / Collapse */}
+                <button
+                    type="button"
+                    onClick={() => setIsCollapsed((current) => !current)}
+                    aria-expanded={!isCollapsed}
+                    aria-controls={`goal-details-${goal.id}`}
+                    aria-label={
+                        isCollapsed
+                            ? `Expand ${goal.title}`
+                            : `Collapse ${goal.title}`
+                    }
+                    className="rounded bg-white px-2 py-0.5 font-medium text-black transition hover:bg-teal-200"
+                >
+                    {isCollapsed ? "+" : "−"}
+                </button>
 
-            <div ref={threeDotsMenuRef}>
-                <ThreeDotMenu
-                    itemId={goal.id}
-                    openMenuId={openGoalMenuId}
-                    setOpenMenuId={setOpenGoalMenuId}
-                    onDelete={handleDeleteGoal}
-                    onEdit={() => {
-                        setIsEditing(true)
-                        setIsCollapsed(false)
-                    }}
-                    onArchive={handleArchiveGoal}
-                />
-            </div>
-
-            
-            <button
-                type="button"
-                {...attributes}
-                {...listeners}
-                className="absolute right-28 top-4 rounded px-2 py-1 bg-white font-medium text-black hover:bg-teal-200 cursor-grab active:cursor-grabbing"
-                aria-label="Drag goal"
+                {/* Drag */}
+                <button
+                    type="button"
+                    {...attributes}
+                    {...listeners}
+                    className="rounded bg-white px-2 py-1 font-medium text-black hover:bg-teal-200 cursor-grab active:cursor-grabbing"
+                    aria-label="Drag goal"
                 >
                     ↕
-            </button>
-     
-            
+                </button>
 
-            <div ref={reorderMenuRef} className="absolute right-16 top-4">
-                <GoalReorderMenu
-                    goalId={goal.id}
-                    isOpen={isReorderMenuOpen}
-                    setIsOpen={setIsReorderMenuOpen}
-                    onMoveToTop={onMoveToTop}
-                    onMoveUp={onMoveUp}
-                    onMoveDown={onMoveDown}
-                    onMoveToBottom={onMoveToBottom}
-                />
+                {/* Reorder Menu */}
+                <div ref={reorderMenuRef}>
+                    <GoalReorderMenu
+                        goalId={goal.id}
+                        isOpen={isReorderMenuOpen}
+                        setIsOpen={setIsReorderMenuOpen}
+                        onMoveToTop={onMoveToTop}
+                        onMoveUp={onMoveUp}
+                        onMoveDown={onMoveDown}
+                        onMoveToBottom={onMoveToBottom}
+                    />
+                </div>
+
+                {/* Three Dot Menu */}
+                <div ref={threeDotsMenuRef}>
+                    <ThreeDotMenu
+                        itemId={goal.id}
+                        openMenuId={openGoalMenuId}
+                        setOpenMenuId={setOpenGoalMenuId}
+                        onDelete={handleDeleteGoal}
+                        onEdit={() => {
+                            setIsEditing(true);
+                            setIsCollapsed(false);
+                        }}
+                        onArchive={handleArchiveGoal}
+                    />
+                </div>
+
             </div>
-
-            
            
             
             
