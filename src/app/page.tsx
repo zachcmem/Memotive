@@ -590,11 +590,31 @@ export default function Home() {
   }
 
  return (
-  <main className="mx-auto min-h-screen max-w-7xl p-8">
-    <header className="mb-8">
+  <main className="mx-auto min-h-screen w-full max-w-[900px] px-4 py-8 sm:px-6 lg:px-10">
+    {/* <header className="mb-8">
       <h1 className="text-3xl text-neutral font-bold ">Memotive Dashboard</h1>
       <p className="text-neutral-100 font-bold">Track your goals, tasks, and progress.</p>
-    </header>
+    </header> */}
+
+    {/* Header and metadata */}
+    <div className="rounded-lg border border-teal-200 bg-neutral-900 p-6 shadow mb-4">
+        <h1 className="text-3xl text-center font-bold text-teal-200">
+            Memotive Dashboard
+        </h1>
+        <p className="text-neutral-100 text-center font-bold mt-3">Track your goals, tasks, and progress.</p>
+        <div className="mt-2  flex items-center gap-3">
+            <span className="flex items-center  rounded-full bg-teal-200 px-2 py-2 text-sm font-bold text-black">
+            </span>
+            <p className=" text-neutral-400">
+                {goals.length} {" "}
+                {goals.length === 1 ? "Goal Displayed" : "Goals Displayed"}
+            </p>
+            <p>
+              tag filter will be below here
+            </p>
+        </div>
+    </div>
+
     {/* form for adding a goal */}
     {/* actually connects the form to function*/}
     <AddGoalForm
