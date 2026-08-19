@@ -58,27 +58,46 @@ export default function TaskItem({
                 {task.completed ? "☑︎" : "☐"}
             </button>
 
+            <button
+                type="button"
+                onClick={() => handleToggleTask(task.id)}
+                className={`h-3 w-3 shrink-0 rounded-full transition ${
+                    task.completed
+                        ? "bg-teal-200"
+                        : "bg-neutral-500 hover:bg-neutral-400"
+                }`}
+            />
+
             {isTaskEditing ? (
                 <div className="ml-3 flex items-center gap-2">
                 <input
                     value={editedTaskTitle}
                     onChange={(e) => setEditedTaskTitle(e.target.value)}
-                    className="rounded border border-teal-200 px-3 py-2 text-sm"
+                    onKeyDown={async (e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            const trimmedTitle=editedTaskTitle.trim();
+                            if(!trimmedTitle){
+                                return;
+                            }
+                           
+                            await handleUpdateTask(task.id, trimmedTitle);
+                            onCancelEdit();
+                        }
+                        if(e.key === "Escape") {
+                            setEditedTaskTitle(task.title);
+                            onCancelEdit();
+                        }
+                        
+                    }}
+                    autoFocus
+                    className="min-w-[3ch] max-w-full rounded border border-teal-200 bg-neutral-800 px-2 py-1 text-sm text-white outline-none [field-sizing:content] focus:ring-2 focus:ring-teal-200"
                     placeholder="Task title"
                 />
 
-                <button
-                    type="button"
-                    onClick={async () => {
-                    await handleUpdateTask(task.id, editedTaskTitle);
-                    onCancelEdit();
-                    }}
-                    className="rounded bg-teal-200 px-2 py-1 text-sm font-medium text-black hover:bg-teal-300"
-                >
-                    Save
-                </button>
+                {/* cancel button for if needed */}
 
-                <button
+                {/* <button
                     type="button"
                     onClick={() => {
                     setEditedTaskTitle(task.title);
@@ -87,7 +106,7 @@ export default function TaskItem({
                     className="rounded bg-white px-2 py-1 text-sm font-medium text-black hover:bg-teal-300"
                 >
                     Cancel
-                </button>
+                </button> */}
                 </div>
             ) : (
                 <>

@@ -153,6 +153,13 @@ export default function GoalCard({
         transition,
     };
 
+    function enterEditMode() {
+        setEditedTitle(goal.title);
+        setEditedDescription(goal.description ?? "");
+        setIsEditing(true);
+        setIsCollapsed(false);
+    }
+
     return(
         <section
             ref={setNodeRef}
@@ -247,9 +254,24 @@ export default function GoalCard({
             ) : (
                 <>
 
-                    <h2 className="text-2xl font-bold">{goal.title}</h2>
+                    {/* <h2 className="text-2xl font-bold">{goal.title}</h2> */}
+                   <h2
+                        onDoubleClick={enterEditMode}
+                        className="mb-2 cursor-text text-2xl font-bold text-white"
+                        title="Double-click to edit"
+                    >
+                        {goal.title}
+                    </h2>
 
-                    <p className="mb-4 font-bold">{goal.description}</p>
+                    {goal.description && (
+                        <p
+                            onDoubleClick={enterEditMode}
+                            className="cursor-text mb-4 font-bold"
+                            title="Double-click to edit"
+                        >
+                            {goal.description}
+                        </p>
+                    )}
 
                     <ProgressBar
                         progress={goal.progress}
