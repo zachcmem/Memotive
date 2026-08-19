@@ -110,7 +110,9 @@ export default function TaskList({
     
     return(
         <>
-            <h3 className="mb-2 text-xl font-bold">Tasks:</h3>
+            <h3 className="mt-5 mb-2 font-medium text-white">
+              Tasks
+            </h3>
             {/* <ul> */}
                 {/* only tasked are passed in, instead of goal
                 {tasks.map((task) => (

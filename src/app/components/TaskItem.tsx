@@ -47,7 +47,7 @@ export default function TaskItem({
         <div className="flex items-center justify-between rounded bg-neutral-800 py-3 pl-3 pr-12">
             <div className="flex items-center">
             {/* Checklist button stays visible at all times */}
-            <button
+            {/* <button
                 className={`rounded px-4 py-2 font-medium text-black transition ${
                 task.completed
                     ? "bg-teal-200"
@@ -56,12 +56,12 @@ export default function TaskItem({
                 onClick={() => handleToggleTask(task.id)}
             >
                 {task.completed ? "☑︎" : "☐"}
-            </button>
+            </button> */}
 
             <button
                 type="button"
                 onClick={() => handleToggleTask(task.id)}
-                className={`h-3 w-3 shrink-0 rounded-full transition ${
+                className={`h-6 w-6 shrink-0 rounded-full transition ${
                     task.completed
                         ? "bg-teal-200"
                         : "bg-neutral-500 hover:bg-neutral-400"

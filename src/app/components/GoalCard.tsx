@@ -257,6 +257,7 @@ export default function GoalCard({
                     {/* <h2 className="text-2xl font-bold">{goal.title}</h2> */}
                    <h2
                         onDoubleClick={enterEditMode}
+
                         className="mb-2 cursor-text text-2xl font-bold text-white"
                         title="Double-click to edit"
                     >
@@ -273,9 +274,13 @@ export default function GoalCard({
                         </p>
                     )}
 
-                    <ProgressBar
-                        progress={goal.progress}
-                    />
+                    <ProgressBar progress={goal.progress} />
+                    
+                    {/* <p className="mt-3 text-sm text-neutral-400">
+                        {goal.completed} of {goal.tasks.length} tasks completed
+                    </p> */}
+        
+    
                 </>
                 
             )}
