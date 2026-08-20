@@ -236,21 +236,42 @@ export default function GoalCard({
             
             {/* the state of the goalCard depends on if its editing or not */}
             {isEditing ? (   
-                <div className="mb-3 space-y-3">
-                    <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-teal-300"> Editing Goal</p>
-                    <input
-                        value={editedTitle}
-                        onChange={(e)=> setEditedTitle(e.target.value)}
-                        className="w-full rounded-md border border-slate-300 px-3 py-2 text-lg font-semibold"
-                        placeholder="Goal title"
-                    />
-                    <textarea
-                        value={editedDescription}
-                        onChange={(e) => setEditedDescription(e.target.value)}
-                        className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-                        placeholder="Goal Title"
-                    />
-                </div>
+                <>
+                    <div className="mb-3 space-y-3">
+                        <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-teal-300"> Editing Goal</p>
+                        <input
+                            value={editedTitle}
+                            onChange={(e)=> setEditedTitle(e.target.value)}
+                            className="w-full rounded-md border border-slate-300 px-3 py-2 text-lg font-semibold"
+                            placeholder="Goal title"
+                        />
+                        <textarea
+                            value={editedDescription}
+                            onChange={(e) => setEditedDescription(e.target.value)}
+                            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+                            placeholder="Goal Title"
+                        />
+                    </div>
+
+                    <div className="mt-4 flex gap-2">
+                        <button
+                            onClick={handleSaveEdit}
+                            className="rounded-md bg-teal-200 px-3 py-1 text-sm font-medium text-teal-900 hover:bg-teal-300"
+                        >
+                            Save
+                        </button>
+                        <button
+                            onClick={()=> {
+                                setEditedTitle(goal.title);
+                                setEditedDescription(goal.description ?? "")
+                                setIsEditing(false);
+                            }}
+                            className="rounded-md bg-slate-200 px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-300"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </>
             ) : (
                 <>
 
@@ -309,27 +330,10 @@ export default function GoalCard({
                     />
                 </>
             )}
-            
+{/*             
             {isEditing && (
-                <div className="mt-4 flex gap-2">
-                    <button
-                        onClick={handleSaveEdit}
-                        className="rounded-md bg-teal-200 px-3 py-1 text-sm font-medium text-teal-900 hover:bg-teal-300"
-                    >
-                        Save
-                    </button>
-                    <button
-                        onClick={()=> {
-                            setEditedTitle(goal.title);
-                            setEditedDescription(goal.description ?? "")
-                            setIsEditing(false);
-                        }}
-                        className="rounded-md bg-slate-200 px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-300"
-                    >
-                        Cancel
-                    </button>
-                </div>
-            )}
+                
+            )} */}
         </section>
     );
 }
